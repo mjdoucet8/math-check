@@ -25,7 +25,7 @@ The full Phaser bundle is approximately 1.21 MB before compression (334 KB gzip)
 
 The foundation branch is numora/foundation, based on main commit 2bfb8cc2280d31a074bac5921383a5186fd3e31c. Both inspected remote branches contained only docs/prototype-brief.md at the start. The recovered local starter was a separate local checkpoint, not a remotely backed-up app.
 
-The local foundation is committed and supplied as a portable source ZIP excluding installed packages, browser binaries and build output. The GitHub push was blocked by automatic approval review because external upload of the generated source and recovered project notes requires explicit user authorization. No foundation commit has been pushed, and no pull request, merge or hosted production deployment has been created. Remote backup remains pending user approval; MAT-49 should remain In Progress until that step is resolved.
+The local foundation is committed and supplied as a portable source ZIP excluding installed packages, browser binaries and build output. After explicit user authorization, branch numora/foundation was pushed and its remote SHA verified. Draft review: https://github.com/mjdoucet8/math-check/pull/1. Final remote commit verification is recorded in Linear MAT-49. Main remains unchanged, and no hosted production deployment has been created.
 
 ## Next
 
