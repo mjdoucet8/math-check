@@ -1,32 +1,17 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#102c36" />
-    <meta name="description" content="Numora: an island waiting to awaken. Foundation preview." />
-    <title>Numora · An island waiting to awaken</title>
-  </head>
-  <body>
-    <main class="preview">
-      <header class="masthead">
-        <a class="wordmark" href="./" aria-label="Numora home">Numora<span aria-hidden="true">✧</span></a>
-        <span class="preview-label">FOUNDATION PREVIEW</span>
-      </header>
-      <section class="introduction" aria-labelledby="title">
-        <p class="eyebrow">THE HARBOUR OF BEGINNINGS</p>
-        <h1 id="title">An island waiting<br />to awaken.</h1>
-        <p class="intro-copy">Ancient lights lie quiet. Beyond the shore,<br class="desktop-break" /> something is waiting to be discovered.</p>
-      </section>
-      <div class="scene-frame">
-        <div id="game" role="img" aria-label="A dormant brass harbour light beside a quiet teal sea"></div>
-        <div class="scene-caption"><span class="caption-line" aria-hidden="true"></span><p>The quiet harbour</p><small>Exploration arrives at the next checkpoint.</small></div>
-      </div>
-      <footer class="preview-footer">
-        <p id="status" role="status" aria-live="polite">Preparing the island…</p>
-        <button id="pause" type="button" disabled aria-pressed="false">Pause atmosphere</button>
-      </footer>
-    </main>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-</html>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#245b65" /><title>Numora · The quiet harbour</title></head>
+<body>
+<main class="game-shell" aria-label="Numora harbour movement preview">
+  <div id="game" aria-label="Isometric harbour. Click or tap the ground to walk."></div>
+  <div id="world-ui">
+    <header class="masthead"><div class="wordmark">Numora <span>✧</span></div><div class="header-controls"><span class="badge">MOVEMENT PREVIEW</span><button id="pause" disabled aria-pressed="false">Pause</button></div></header>
+    <section class="goal"><span class="eyebrow">YOUR FIRST STEPS</span><h1 id="goal-text">Meet the harbour keeper</h1><p>Select a person or the light to walk over and take a look.</p></section>
+    <aside class="place"><span class="place-number">01</span><div>THE QUIET HARBOUR<small>A light waiting to awaken.</small></div></aside>
+    <footer class="controls"><p id="status" role="status">Preparing the harbour…</p><button id="reset" disabled>Start again</button></footer>
+    <section id="dialogue" class="dialogue" aria-label="Conversation" aria-live="polite" hidden><div><span id="speaker" class="eyebrow"></span><p id="speech"></p></div><button id="close-dialogue" aria-label="Close conversation">×</button></section>
+  </div>
+  <div id="pause-panel" class="pause-panel" hidden><section role="dialog" aria-modal="true" aria-labelledby="pause-title"><span class="eyebrow">TAKE YOUR TIME</span><h2 id="pause-title">The harbour can wait.</h2><button id="resume">Continue exploring</button></section></div>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body></html>
