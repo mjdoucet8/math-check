@@ -18,7 +18,7 @@ The production-preview browser checks exercise real mouse clicks and emulated ta
 
 Screenshots are reviewed for desktop and narrow-screen layout. This is Chromium touch emulation, not a physical classroom-tablet test. The complete Phaser bundle still produces Vite's large-chunk warning, at about 1.22 MB raw / 339 KB gzip. Classroom loading and actual-device feel need later validation.
 
-## Mathieu's review · pending
+## Mathieu's review · approved 2 October 2026
 
 Open the local preview and try:
 
@@ -27,7 +27,7 @@ Open the local preview and try:
 3. Pause during a walk, continue, then use Start again.
 4. Try a narrow window or touch device. Check player scale, camera motion, reading size and what seems clickable.
 
-Record a proceed/adjust decision in MAT-52 before beginning the harbour counting challenge or expanding the full journey. MAT-50 covers assets; MAT-51 covers movement; MAT-52 stays in progress until this review is received.
+Mathieu reviewed the preview, said “Things look good,” and explicitly requested Stage 3. Proceed decision recorded in MAT-52, now Done. No movement adjustments requested. The following prompts are retained as the completed review checklist. MAT-50 and MAT-51 are also Done.
 
 ## Git backup
 
