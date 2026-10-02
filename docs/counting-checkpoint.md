@@ -23,3 +23,7 @@ On 2 October 2026, strict TypeScript and the production build passed, along with
 Domain checks cover selection versus submission, first-response and retry evidence, duplicate Confirm, preserved arrangements, optional help/decline, three separate practice stones, sticky assistance and the post-demonstration guided trigger. Browser checks use actual clicks and emulated taps to approach the objects, manipulate stones, submit an answer, close/reopen, accept practice, complete guidance and reset the restored light. Existing movement/pause/resize checks remain active.
 
 Browser speech output and physical classroom tablets require a manual check. Automated checks verify visible counting feedback and state, not audible speech quality. Runtime code and artwork remain bundled locally; no account or student name is collected. Reload resets session progress until persistence is implemented.
+
+## User review · 2 October 2026
+
+Mathieu confirmed “it's working” and requested Phase 4. The prior GitHub run subsequently completed with two desktop whole-test timeouts, while six browser checks passed. Local checks had passed. Phase 4 splits long scenarios, allows bounded extra headroom for software rendering, and reduces WebGL multisampling/render frequency. Verification of the new checkpoint supersedes that timed-out run.

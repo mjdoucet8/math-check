@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { BUILDINGS, INTERACTABLES, PROPS, TILE_HEIGHT, TILE_WIDTH, land, project } from './harbour.ts';
+import { BUILDINGS, INTERACTABLES, PROPS, TILE_HEIGHT, TILE_WIDTH, land, project, type Interactable } from './harbour.ts';
 
 type Graphics = Phaser.GameObjects.Graphics;
 function bake(scene: Phaser.Scene, g: Graphics, name: string, width: number, height: number, x: number, y: number) {
@@ -146,20 +146,21 @@ export function drawBeacon(g: Graphics, awake = false) {
   g.lineStyle(3, 0xb69b61).strokeEllipse(0, -26, 27, 12);
 }
 
-export function makeInteractables(scene: Phaser.Scene) {
-  return INTERACTABLES.map((object) => {
+export function makeInteractables(scene: Phaser.Scene, objects: readonly Interactable[] = INTERACTABLES) {
+  return objects.map((object) => {
     const p = project(object);
     const container = scene.add.container(p.x, p.y).setDepth(p.y);
     const halo = scene.add.graphics().lineStyle(1.5, 0xd6b56b, .75).strokeEllipse(0, 4, object.id === 'keeper' ? 42 : 70, 19);
     const art = scene.add.graphics();
     if (object.id === 'keeper') drawPerson(art, 0, false, true);
-    else drawBeacon(art);
+    else if (object.id === 'beacon') drawBeacon(art);
+    else { art.fillStyle(0x95784d).fillRect(-5,-63,10,63); art.fillStyle(0xe0c88b).fillRoundedRect(-38,-62,76,30,4); art.lineStyle(3,0x34626a).lineBetween(-20,-47,22,-47).lineBetween(12,-55,22,-47).lineBetween(12,-39,22,-47); }
     container.add([halo, art]);
-    const label = scene.add.text(0, object.id === 'keeper' ? -86 : -167, object.name, {
+    const label = scene.add.text(0, object.id === 'beacon' || object.id === 'arch' ? -167 : -86, object.name, {
       fontFamily: 'Georgia, serif', fontSize: '13px', color: '#fff0ca', backgroundColor: '#244950', padding: { x: 9, y: 5 },
     }).setOrigin(.5);
     container.add(label);
-    const height = object.id === 'keeper' ? 105 : 185;
+    const height = object.id === 'beacon' || object.id === 'arch' ? 185 : 105;
     container.setInteractive(new Phaser.Geom.Rectangle(-45, -height, 90, height + 18), Phaser.Geom.Rectangle.Contains);
     container.on('pointerover', () => { halo.setAlpha(1); scene.input.setDefaultCursor('pointer'); });
     container.on('pointerout', () => { halo.setAlpha(.75); scene.input.setDefaultCursor('default'); });

@@ -17,7 +17,7 @@ export const INTERACTABLES = [
   { id: 'keeper', x: 8, y: 8, name: 'Harbour keeper', line: 'This light has been quiet for a long time. Can you help me fix it?' },
   { id: 'beacon', x: 11, y: 8, name: 'The harbour light', line: 'An old brass light. Its crystal is dark, but something inside seems to be waiting.' },
 ] as const;
-export type Interactable = typeof INTERACTABLES[number];
+export interface Interactable extends Cell { id: string; name: string; line: string }
 
 export function key(cell: Cell): string { return `${cell.x},${cell.y}`; }
 export function project(cell: Point): Point {
@@ -41,8 +41,8 @@ export function neighbours(cell: Cell): Cell[] {
   return [{ x: cell.x + 1, y: cell.y }, { x: cell.x - 1, y: cell.y }, { x: cell.x, y: cell.y + 1 }, { x: cell.x, y: cell.y - 1 }];
 }
 /** Four-neighbour routes cannot cut through diagonal building corners. */
-export function route(start: Cell, end: Cell): Cell[] | null {
-  if (!walkable(start) || !walkable(end)) return null;
+export function route(start: Cell, end: Cell, accessible: (cell: Cell) => boolean = walkable): Cell[] | null {
+  if (!accessible(start) || !accessible(end)) return null;
   const queue: Cell[] = [start];
   const seen = new Set([key(start)]);
   const previous = new Map<string, Cell>();
@@ -58,7 +58,7 @@ export function route(start: Cell, end: Cell): Cell[] | null {
       return result;
     }
     for (const next of neighbours(current)) {
-      if (walkable(next) && !seen.has(key(next))) {
+      if (accessible(next) && !seen.has(key(next))) {
         seen.add(key(next)); previous.set(key(next), current); queue.push(next);
       }
     }
@@ -66,7 +66,7 @@ export function route(start: Cell, end: Cell): Cell[] | null {
   return null;
 }
 /** Approach the nearest reachable adjacent tile, never the object's occupied tile. */
-export function approach(start: Cell, object: Cell): Cell[] | null {
-  const routes = neighbours(object).map((cell) => route(start, cell)).filter((path): path is Cell[] => path !== null);
+export function approach(start: Cell, object: Cell, accessible: (cell: Cell) => boolean = walkable): Cell[] | null {
+  const routes = neighbours(object).map((cell) => route(start, cell, accessible)).filter((path): path is Cell[] => path !== null);
   return routes.sort((a, b) => a.length - b.length)[0] ?? null;
 }

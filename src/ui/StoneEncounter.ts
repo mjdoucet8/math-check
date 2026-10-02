@@ -75,7 +75,7 @@ export class StoneEncounter {
     this.panel.dataset.phase = c.phase; this.panel.dataset.evidence = JSON.stringify(c.progress);
     const title = c.phase === 'complete' ? 'The harbour light is awake.' : c.phase === 'demo' ? 'Let’s count these practice stones.' : c.phase === 'guided' ? 'Let’s place five together.' : 'Put five stones into the tray.';
     let body = '';
-    if (c.phase === 'complete') body = '<div class="restoration-symbol" aria-hidden="true">✧</div><p>A warm light reaches across the harbour. The coastal path is next.</p><button data-action="close">Continue exploring</button>';
+    if (c.phase === 'complete') body = '<div class="restoration-symbol" aria-hidden="true">✧</div><p>A warm light reaches across the harbour. Follow the coastal path beside the harbour.</p><button data-action="close">Continue exploring</button>';
     else if (c.phase === 'demo') body = `<p>These are practice stones. Your tray will stay as you left it.</p><div class="practice-stones">${[0,1,2].map(id => this.stone(id, id < c.demoStep, true)).join('')}</div><p class="count-word" role="status">${words[c.demoStep - 1] ?? 'Start with one stone.'}</p><button data-action="${c.demoStep < 3 ? 'practice' : 'return'}">${c.demoStep < 3 ? 'Count the next stone' : 'Try your stones'}</button>`;
     else {
       const stones = Array.from({ length: STONE_SUPPLY }, (_, id) => id);

@@ -269,3 +269,11 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 .count-word {font:25px Georgia,serif!important;text-align:center;}
 .restoration-symbol {font:96px Georgia,serif;color:#ead08c;text-align:center;}
 @media(max-width:540px){.challenge-panel{padding:12px;}#challenge-content{padding:18px;max-height:calc(100dvh - 24px);}#challenge-content h2{font-size:24px;}.stone-zones{grid-template-columns:1fr;gap:12px;margin-top:12px;}.stone-grid{grid-template-columns:repeat(4,1fr);min-height:60px;}.stone-zones section{padding:10px;}.stone{height:48px;}.stone-zones h3{margin-bottom:6px;}.encounter-feedback{min-height:32px;}}
+#vessel-content {width:min(640px,100%);max-height:calc(100dvh - 40px);overflow:auto;padding:26px;background:#193f49;border:1px solid #c9ae76;border-radius:16px;box-shadow:0 20px 70px #09273077;}
+#vessel-content header {display:flex;align-items:center;justify-content:space-between;gap:10px;}
+#vessel-content header button {font-size:25px;min-width:44px;padding:0;}
+#vessel-content h2 {font:27px Georgia,serif;margin:12px 0;}
+#vessel-content p {font-size:13px;line-height:1.6;color:#d3dfce;}
+.glass-vessel {width:150px;height:224px;border:3px solid #bfdacc;border-top:8px solid #d8e8d5;border-radius:8px 8px 28px 28px;background:#a3d3c21a;margin:20px auto;display:flex;flex-direction:column-reverse;overflow:hidden;padding:8px;gap:3px;box-shadow:inset 8px 0 0 #d4e9d322;}
+.water-portion {height:22px;flex:none;background:linear-gradient(100deg,#76adad,#91c5b5);border-radius:3px;border-top:2px solid #c4e1caaa;}
+@media(max-width:540px){#vessel-content{padding:18px;max-height:calc(100dvh - 24px);}#vessel-content h2{font-size:23px;}.glass-vessel{height:205px;margin:14px auto;}.water-portion{height:20px;}}

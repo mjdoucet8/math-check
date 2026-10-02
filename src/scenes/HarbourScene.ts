@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
-import { approach, key, project, route, START, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
+import { approach, key, project, route, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
+import { Journey, type Area } from '../domain/journey.ts';
+import { AREA_OBJECTS, AREA_START, areaWalkable } from '../world/areas.ts';
+import { drawBeyondHarbour, refreshGarden } from '../world/gardenArt.ts';
 import { drawBeacon, drawPerson, drawTerrain, makeInteractables } from '../world/art.ts';
 
 export interface HarbourState {
-  beaconAwake: boolean; cell: string; destination: string; position: Point; moving: boolean;
+  area: Area; objects: readonly Interactable[]; beaconAwake: boolean; cell: string; destination: string; position: Point; moving: boolean;
   view: { left: number; top: number; zoom: number }; visited: string[];
 }
 export class HarbourScene extends Phaser.Scene {
@@ -13,7 +16,8 @@ export class HarbourScene extends Phaser.Scene {
   private water!: Phaser.GameObjects.Graphics;
   private marker!: Phaser.GameObjects.Graphics;
   private residents!: ReturnType<typeof makeInteractables>;
-  private cell: Cell = { ...START };
+  private cell: Cell = {x:7,y:11};
+  private journey!: Journey;
   private path: Cell[] = [];
   private pending: Interactable | null = null;
   private visited = new Set<string>();
@@ -25,14 +29,20 @@ export class HarbourScene extends Phaser.Scene {
   private telemetryAt = 0;
   constructor() { super(HarbourScene.KEY); }
   create() {
-    this.beaconAwake = false; this.cell = { ...START }; this.path = []; this.pending = null; this.visited.clear();
+    this.journey = this.registry.get('journey') as Journey;
+    this.beaconAwake = this.journey.beaconAwake;
+    this.cell = { ...(this.journey.positions.get(this.journey.area) ?? AREA_START[this.journey.area]) }; this.path = []; this.pending = null;
+    this.visited = this.journey.visited.get(this.journey.area) ?? new Set<string>();
+    this.journey.visited.set(this.journey.area,this.visited);
     this.phase = 0; this.markerExpiry = 0; this.telemetryAt = 0;
     this.reducedMotion = Boolean(this.registry.get('reduced-motion'));
     this.water = this.add.graphics().setDepth(-1000);
-    drawTerrain(this);
-    this.residents = makeInteractables(this);
+    if (this.journey.area === 'harbour') {
+      drawTerrain(this); this.residents = makeInteractables(this, AREA_OBJECTS.harbour);
+      if (this.beaconAwake) drawBeacon(this.residents.find(r=>r.object.id==='beacon')!.art,true);
+    } else this.residents = drawBeyondHarbour(this,this.journey.area,this.journey.gardenCompleted);
     this.marker = this.add.graphics().setDepth(-90);
-    const start = project(START);
+    const start = project(this.cell);
     this.player = this.add.container(start.x, start.y).setDepth(start.y + 1);
     this.playerArt = this.add.graphics(); this.player.add(this.playerArt);
     drawPerson(this.playerArt, 0, false);
@@ -50,15 +60,17 @@ export class HarbourScene extends Phaser.Scene {
     this.scale.on('resize', this.fitCamera, this);
     this.registry.events.on('changedata', this.registryChanged, this);
     this.game.events.on('harbour-restored', this.restoreBeacon, this);
+    this.game.events.on('garden-water', this.updateGarden, this);
     this.events.once('shutdown', () => {
       this.game.events.off('harbour-restored', this.restoreBeacon, this);
+      this.game.events.off('garden-water', this.updateGarden, this);
       this.scale.off('resize', this.fitCamera, this);
       this.registry.events.off('changedata', this.registryChanged, this);
       this.input.setDefaultCursor('default');
     });
     this.drawWater(); this.emitState();
     this.game.events.emit('harbour-ready');
-    this.game.events.emit('harbour-goal', 'Meet the harbour keeper');
+    this.emitGoal();
   }
   setCameraPaused(paused: boolean) {
     const camera = this.cameras.main;
@@ -82,7 +94,7 @@ export class HarbourScene extends Phaser.Scene {
     this.emitState();
   }
   private moveToGround(destination: Cell, point: Point) {
-    const next = route(this.planningStart(), destination);
+    const next = route(this.planningStart(), destination, cell=>areaWalkable(this.journey.area,cell));
     if (next === null) {
       this.showMarker(point, true);
       this.game.events.emit('harbour-feedback', 'That spot is out of reach. Try the stone paths.');
@@ -91,7 +103,7 @@ export class HarbourScene extends Phaser.Scene {
     this.setPath(next, null);
   }
   private moveToObject(object: Interactable) {
-    const next = approach(this.planningStart(), object);
+    const next = approach(this.planningStart(), object, cell=>areaWalkable(this.journey.area,cell));
     if (next !== null) this.setPath(next, object);
   }
   private showMarker(point: Point, blocked: boolean) {
@@ -104,21 +116,41 @@ export class HarbourScene extends Phaser.Scene {
   private finishInteraction() {
     const object = this.pending; this.pending = null;
     if (!object) return;
+    if (object.id==='coast') {
+      if(this.journey.area==='harbour'&&!this.beaconAwake) {
+        this.game.events.emit('harbour-dialogue',{speaker:'Coastal path',speech:'Bring the harbour light back before following this path.'});return;
+      }
+      this.travel('coastal-path');return;
+    }
+    if(object.id==='harbour'){this.travel('harbour');return;}
+    if(object.id==='arch'){this.travel('garden');return;}
+    if(object.id==='pump'){this.game.events.emit('garden-open-challenge');return;}
     this.visited.add(object.id);
     if (object.id === 'beacon' && this.visited.has('keeper') && !this.beaconAwake) {
       this.game.events.emit('harbour-open-challenge');
     } else this.game.events.emit('harbour-dialogue', {
       speaker: object.name,
-      speech: this.beaconAwake ? object.id === 'keeper' ? 'You brought the light back. The coastal path is waiting for our next adventure.' : 'The crystal shines with a warm, steady light.' : object.line,
+      speech: object.id==='gardener' && this.journey.gardenCompleted===5 ? 'You brought water back. The garden can begin to grow again.' : this.journey.area==='harbour' && this.beaconAwake ? object.id === 'keeper' ? 'You brought the light back. The coastal path is waiting for our next adventure.' : 'The crystal shines with a warm, steady light.' : object.line,
     });
-    this.game.events.emit('harbour-goal', this.beaconAwake ? 'The coastal path is next' : this.visited.has('keeper') ? 'Restore the harbour light' : 'Meet the harbour keeper');
+    this.emitGoal();
     this.emitState();
   }
+  private emitGoal() {
+    const area=this.journey.area;
+    this.game.events.emit('harbour-goal', area==='harbour' ? this.beaconAwake ? 'Follow the coastal path' : this.visited.has('keeper') ? 'Restore the harbour light' : 'Meet the harbour keeper'
+      : area==='coastal-path' ? 'Explore the overgrown arch' : this.journey.gardenCompleted===5 ? 'The garden water is restored' : 'Bring water back to the garden');
+  }
+  private travel(destination: Area) {
+    this.journey.positions.set(this.journey.area,{...this.cell});
+    if(!this.journey.travel(destination))return;
+    this.game.events.emit('harbour-close-dialogue');this.game.events.emit('harbour-travel');this.scene.restart();
+  }
+  private updateGarden(completed: number) {this.journey.gardenCompleted=completed;if(this.journey.area==='garden')refreshGarden(this,completed);this.emitGoal();}
   private restoreBeacon() {
-    this.beaconAwake = true;
+    this.beaconAwake = true; this.journey.beaconAwake = true;
     const beacon = this.residents.find(resident => resident.object.id === 'beacon')!;
     drawBeacon(beacon.art, true);
-    this.game.events.emit('harbour-goal', 'The coastal path is next');
+    this.emitGoal();
     this.emitState();
   }
   private drawWater() {
@@ -136,7 +168,7 @@ export class HarbourScene extends Phaser.Scene {
   private emitState() {
     const camera = this.cameras.main, origin = camera.getWorldPoint(0, 0);
     const state: HarbourState = {
-      beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
+      area: this.journey.area, objects: AREA_OBJECTS[this.journey.area], beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
       view: { left: origin.x, top: origin.y, zoom: camera.zoom }, visited: [...this.visited],
     };
     this.game.events.emit('harbour-state', state);
@@ -156,7 +188,7 @@ export class HarbourScene extends Phaser.Scene {
     }
     this.player.setDepth(this.player.y + 1);
     drawPerson(this.playerArt, this.reducedMotion ? 0 : this.phase, this.path.length > 0, false, this.facing);
-    for (const resident of this.residents) if (resident.object.id === 'keeper') drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
+    for (const resident of this.residents) if (['keeper','gardener'].includes(resident.object.id)) drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
     if (!this.reducedMotion) this.drawWater();
     this.marker.setAlpha(Phaser.Math.Clamp((this.markerExpiry - this.time.now) / 250, 0, 1));
     if (this.time.now >= this.telemetryAt) { this.telemetryAt = this.time.now + 50; this.emitState(); }
