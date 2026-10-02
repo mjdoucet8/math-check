@@ -32,7 +32,7 @@ test('real input routes around obstacles, approaches objects, pauses, resets and
   await select(page, touch, 8, 8, 40);
   await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 12000 });
   await expect(page.locator('#dialogue')).toBeVisible();
-  await expect(page.locator('#goal-text')).toHaveText('Explore the quiet harbour');
+  await expect(page.locator('#goal-text')).toHaveText('Restore the harbour light');
   await page.getByRole('button', { name: 'Close conversation' }).click();
   await select(page, touch, 14, 12);
   await expect(page.locator('#game')).toHaveAttribute('data-moving', 'true');

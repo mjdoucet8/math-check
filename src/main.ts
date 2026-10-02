@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene.ts';
 import { HarbourScene, type HarbourState } from './scenes/HarbourScene.ts';
+import { StoneEncounter } from './ui/StoneEncounter.ts';
 import './style.css';
 
 function element<T extends HTMLElement>(id: string): T {
@@ -22,6 +23,15 @@ const game = new Phaser.Game({
 });
 let paused = false, feedbackTimer: ReturnType<typeof setTimeout> | undefined;
 const hint = 'Click or tap the paths to walk. Select a person or the light to approach.';
+const encounter = new StoneEncounter(() => {
+  closeDialogue();
+  (game.scene.getScene(HarbourScene.KEY) as HarbourScene).setCameraPaused(true);
+  game.scene.pause(HarbourScene.KEY); element('world-ui').inert = true; host.inert = true;
+}, () => {
+  (game.scene.getScene(HarbourScene.KEY) as HarbourScene).setCameraPaused(false);
+  game.scene.resume(HarbourScene.KEY); element('world-ui').inert = false; host.inert = false;
+}, () => game.events.emit('harbour-restored'));
+game.events.on('harbour-open-challenge', () => encounter.open());
 function closeDialogue() { dialogue.hidden = true; }
 function setPaused(value: boolean) {
   paused = value;
@@ -33,12 +43,12 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
-  host.dataset.ready = 'true'; host.dataset.checkpoint = 'movement';
+  host.dataset.ready = 'true'; host.dataset.checkpoint = 'counting';
   pause.disabled = false; reset.disabled = false; status.textContent = hint;
 });
 // Read-only geometry exposed for browser verification; input still comes from real clicks/taps.
 game.events.on('harbour-state', (state: HarbourState) => {
-  host.dataset.cell = state.cell; host.dataset.destination = state.destination; host.dataset.position = JSON.stringify(state.position);
+  host.dataset.beaconAwake = String(state.beaconAwake); host.dataset.cell = state.cell; host.dataset.destination = state.destination; host.dataset.position = JSON.stringify(state.position);
   host.dataset.view = JSON.stringify(state.view); host.dataset.moving = String(state.moving);
   host.dataset.visited = state.visited.join(',');
 });
@@ -56,7 +66,7 @@ pause.addEventListener('click', () => setPaused(!paused), options);
 element('resume').addEventListener('click', () => setPaused(false), options);
 element('close-dialogue').addEventListener('click', closeDialogue, options);
 reset.addEventListener('click', () => {
-  clearTimeout(feedbackTimer); closeDialogue(); if (paused) setPaused(false);
+  clearTimeout(feedbackTimer); encounter.reset(); closeDialogue(); if (paused) setPaused(false);
   host.dataset.ready = 'false'; game.scene.getScene(HarbourScene.KEY).scene.restart();
 }, options);
 document.addEventListener('keydown', (event) => {
@@ -64,6 +74,6 @@ document.addEventListener('keydown', (event) => {
   if (paused && event.key === 'Tab') { event.preventDefault(); element('resume').focus(); }
 }, options);
 motion.addEventListener('change', (event) => { game.registry.set('reduced-motion', event.matches); }, options);
-function dispose() { lifecycle.abort(); clearTimeout(feedbackTimer); game.destroy(true); }
+function dispose() { encounter.dispose(); lifecycle.abort(); clearTimeout(feedbackTimer); game.destroy(true); }
 window.addEventListener('pagehide', (event) => { if (!event.persisted) dispose(); }, options);
 if (import.meta.hot) import.meta.hot.dispose(dispose);

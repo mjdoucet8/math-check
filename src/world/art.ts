@@ -130,14 +130,16 @@ export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper 
   if (keeper) { g.fillStyle(0xf0dfb8).fillRoundedRect(-6, -28 - bob, 13, 13, 2); }
 }
 
-export function drawBeacon(g: Graphics) {
+export function drawBeacon(g: Graphics, awake = false) {
+  g.clear();
+  if (awake) g.fillStyle(0xeacf7f, .18).fillCircle(0, -77, 58);
   g.fillStyle(0x3d574e, .3).fillEllipse(2, 5, 65, 20);
   g.fillStyle(0x8e977b).fillRoundedRect(-22, -23, 44, 25, 5);
   g.fillStyle(0xc7ac70).fillEllipse(0, -23, 53, 16);
   g.fillStyle(0x9c814e).fillRect(-19, -111, 38, 87);
   g.fillStyle(0x274c54).fillRect(-13, -103, 26, 58);
-  polygon(g, 0x44696b, [[0, -96], [10, -77], [0, -56], [-10, -77]]);
-  polygon(g, 0x25474c, [[0, -96], [0, -56], [-10, -77]]);
+  polygon(g, awake ? 0xffe6a1 : 0x44696b, [[0, -96], [10, -77], [0, -56], [-10, -77]]);
+  polygon(g, awake ? 0xcda856 : 0x25474c, [[0, -96], [0, -56], [-10, -77]]);
   g.fillStyle(0xddc58a).fillEllipse(0, -109, 51, 16).fillEllipse(0, -41, 48, 14);
   polygon(g, 0xb2965c, [[-25, -114], [0, -143], [25, -114]]);
   g.fillStyle(0xe0c58c).fillCircle(0, -144, 4);

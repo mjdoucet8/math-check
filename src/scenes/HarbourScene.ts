@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import { approach, key, project, route, START, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
-import { drawPerson, drawTerrain, makeInteractables } from '../world/art.ts';
+import { drawBeacon, drawPerson, drawTerrain, makeInteractables } from '../world/art.ts';
 
 export interface HarbourState {
-  cell: string; destination: string; position: Point; moving: boolean;
+  beaconAwake: boolean; cell: string; destination: string; position: Point; moving: boolean;
   view: { left: number; top: number; zoom: number }; visited: string[];
 }
 export class HarbourScene extends Phaser.Scene {
@@ -17,6 +17,7 @@ export class HarbourScene extends Phaser.Scene {
   private path: Cell[] = [];
   private pending: Interactable | null = null;
   private visited = new Set<string>();
+  private beaconAwake = false;
   private phase = 0;
   private facing = 1;
   private reducedMotion = false;
@@ -24,7 +25,7 @@ export class HarbourScene extends Phaser.Scene {
   private telemetryAt = 0;
   constructor() { super(HarbourScene.KEY); }
   create() {
-    this.cell = { ...START }; this.path = []; this.pending = null; this.visited.clear();
+    this.beaconAwake = false; this.cell = { ...START }; this.path = []; this.pending = null; this.visited.clear();
     this.phase = 0; this.markerExpiry = 0; this.telemetryAt = 0;
     this.reducedMotion = Boolean(this.registry.get('reduced-motion'));
     this.water = this.add.graphics().setDepth(-1000);
@@ -48,7 +49,9 @@ export class HarbourScene extends Phaser.Scene {
     });
     this.scale.on('resize', this.fitCamera, this);
     this.registry.events.on('changedata', this.registryChanged, this);
+    this.game.events.on('harbour-restored', this.restoreBeacon, this);
     this.events.once('shutdown', () => {
+      this.game.events.off('harbour-restored', this.restoreBeacon, this);
       this.scale.off('resize', this.fitCamera, this);
       this.registry.events.off('changedata', this.registryChanged, this);
       this.input.setDefaultCursor('default');
@@ -102,10 +105,20 @@ export class HarbourScene extends Phaser.Scene {
     const object = this.pending; this.pending = null;
     if (!object) return;
     this.visited.add(object.id);
-    this.game.events.emit('harbour-dialogue', { speaker: object.name, speech: object.line });
-    this.game.events.emit('harbour-goal', this.visited.has('keeper')
-      ? this.visited.has('beacon') ? 'Explore the quiet harbour' : 'Inspect the harbour light'
-      : 'Meet the harbour keeper');
+    if (object.id === 'beacon' && this.visited.has('keeper') && !this.beaconAwake) {
+      this.game.events.emit('harbour-open-challenge');
+    } else this.game.events.emit('harbour-dialogue', {
+      speaker: object.name,
+      speech: this.beaconAwake ? object.id === 'keeper' ? 'You brought the light back. The coastal path is waiting for our next adventure.' : 'The crystal shines with a warm, steady light.' : object.line,
+    });
+    this.game.events.emit('harbour-goal', this.beaconAwake ? 'The coastal path is next' : this.visited.has('keeper') ? 'Restore the harbour light' : 'Meet the harbour keeper');
+    this.emitState();
+  }
+  private restoreBeacon() {
+    this.beaconAwake = true;
+    const beacon = this.residents.find(resident => resident.object.id === 'beacon')!;
+    drawBeacon(beacon.art, true);
+    this.game.events.emit('harbour-goal', 'The coastal path is next');
     this.emitState();
   }
   private drawWater() {
@@ -123,7 +136,7 @@ export class HarbourScene extends Phaser.Scene {
   private emitState() {
     const camera = this.cameras.main, origin = camera.getWorldPoint(0, 0);
     const state: HarbourState = {
-      cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
+      beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
       view: { left: origin.x, top: origin.y, zoom: camera.zoom }, visited: [...this.visited],
     };
     this.game.events.emit('harbour-state', state);

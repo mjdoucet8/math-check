@@ -245,3 +245,27 @@ button:disabled {
     font-size:13px;
   }
 }
+.challenge-panel {position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:#102e3acc;backdrop-filter:blur(3px);padding:20px;}
+#challenge-content {width:min(680px,100%);max-height:calc(100dvh - 40px);overflow:auto;padding:26px;background:#193f49;border:1px solid #c9ae76;border-radius:16px;box-shadow:0 20px 70px #09273077;}
+#challenge-content header {display:flex;align-items:center;justify-content:space-between;gap:10px;}
+#challenge-content header button {font-size:25px;min-width:44px;padding:0;}
+#challenge-content h2 {font:27px Georgia,serif;margin:12px 0;}
+#challenge-content p {font-size:13px;line-height:1.6;color:#d3dfce;}
+.stone-zones {display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;}
+.stone-zones section {padding:14px;border:1px solid #829a8c55;border-radius:12px;background:#214d56;}
+.stone-zones h3 {font:16px Georgia,serif;margin:0 0 12px;}
+.stone-zones .stone-tray {border:2px solid #b3995f;background:#625c3b44;}
+.stone-grid {display:grid;grid-template-columns:repeat(4,1fr);gap:6px;min-height:116px;align-content:start;}
+.stone {display:block;min-width:0;width:100%;height:52px;padding:0;border:1px solid transparent;background:transparent;border-radius:8px;}
+.stone svg {width:100%;height:100%;pointer-events:none;}
+button.stone:hover {background:#517a7944;border-color:#c6b982;}
+.encounter-feedback {min-height:42px;margin-bottom:10px;}
+.encounter-actions {display:flex;flex-wrap:wrap;gap:10px;}
+.encounter-actions button:first-child {background:#ad945c;color:#142f36;border-color:#d6bf81;}
+.listen {margin-top:14px;background:transparent;font-size:11px;}
+.practice-stones {display:flex;gap:20px;justify-content:center;margin-top:28px;}
+.practice-stones .stone {width:75px;height:65px;opacity:.45;}
+.practice-stones .counted {opacity:1;outline:2px solid #dbc180;}
+.count-word {font:25px Georgia,serif!important;text-align:center;}
+.restoration-symbol {font:96px Georgia,serif;color:#ead08c;text-align:center;}
+@media(max-width:540px){.challenge-panel{padding:12px;}#challenge-content{padding:18px;max-height:calc(100dvh - 24px);}#challenge-content h2{font-size:24px;}.stone-zones{grid-template-columns:1fr;gap:12px;margin-top:12px;}.stone-grid{grid-template-columns:repeat(4,1fr);min-height:60px;}.stone-zones section{padding:10px;}.stone{height:48px;}.stone-zones h3{margin-bottom:6px;}.encounter-feedback{min-height:32px;}}

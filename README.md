@@ -1,6 +1,6 @@
 # Numora
 
-Stage 2 movement checkpoint for the harbour-to-garden proof of concept. Explore a layered isometric harbour, select the keeper or dormant light to approach automatically, and pause or restart. Maths tasks, saving, garden access and rewards belong to later stages.
+Stage 3 harbour counting checkpoint for the harbour-to-garden proof of concept. Explore a layered isometric harbour, select the keeper or dormant light to approach automatically, and pause or restart. Meet the keeper, then select the light to place five stones in its tray and Confirm. Optional practice and guided counting preserve distinct completion evidence. Saving, garden access and rewards belong to later stages.
 
 ## Run
 
@@ -37,16 +37,19 @@ npm test
 - `src/world/harbour.ts`: island, blocked footprints, projection and routing, independent of scenery.
 - `src/world/art.ts`: layered vector scenery, cached textures and idle/walk animation.
 - `src/scenes/FoundationScene.ts`: historical engine preview; no longer loaded.
+- `src/ui/StoneEncounter.ts`: accessible counting overlay, optional narration, practice and guided actions.
+- `src/domain/stones.ts`: stone selection and submitted-attempt/help state.
 - `src/domain/progress.ts`: plain shared challenge/outcome/progress contract; no Phaser dependency or storage system. First-response success, retries, assistance and guided completion remain distinct.
 - `tests/`: domain and browser checks.
 - `docs/prototype-brief.md`: original approved scope, preserved unchanged.
 - `docs/recovered-starter/`: previous incomplete local starter preserved unchanged as historical material. Its commands and instructions are not the active implementation.
 - `docs/source-manifest.json`: original filenames, local source locations and checksums for the supplied handoff, concepts and curriculum. Originals remain in `/home/owner/Numora`; images/PDFs have not been uploaded to GitHub.
 - `docs/foundation-status.md`: completed foundation record.
-- `docs/movement-review.md`: movement checkpoint verification and review prompts.
+- `docs/movement-review.md`: approved movement checkpoint.
+- `docs/counting-checkpoint.md`: harbour counting scope, evidence and verification.
 
 ## Next checkpoint
 
-MAT-52: Mathieu reviews movement feel, scale, camera and click clarity before the maths journey begins. Movement uses mouse/touch ground selection and automatic approach. Keyboard controls operate the browser buttons; keyboard world navigation and a character creator are outside this checkpoint. Reduced motion stops decorative animation while keeping navigation available.
+Review the harbour counting encounter before expanding the coastal path and garden. Five is a provisional prototype target. Incorrect answers preserve the tray; help becomes available after two incorrect submitted arrangements. After the demonstration, one new incorrect submitted arrangement offers guided counting. An unchanged repeated Confirm is ignored. Reload and Start again clear this session; persistence is later work.
 
 Linear: https://linear.app/mathieu-doucet/project/numora-e3f40e0a62ed

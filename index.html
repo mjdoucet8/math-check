@@ -5,12 +5,13 @@
 <main class="game-shell" aria-label="Numora harbour movement preview">
   <div id="game" aria-label="Isometric harbour. Click or tap the ground to walk."></div>
   <div id="world-ui">
-    <header class="masthead"><div class="wordmark">Numora <span>✧</span></div><div class="header-controls"><span class="badge">MOVEMENT PREVIEW</span><button id="pause" disabled aria-pressed="false">Pause</button></div></header>
+    <header class="masthead"><div class="wordmark">Numora <span>✧</span></div><div class="header-controls"><span class="badge">HARBOUR ENCOUNTER</span><button id="pause" disabled aria-pressed="false">Pause</button></div></header>
     <section class="goal"><span class="eyebrow">YOUR FIRST STEPS</span><h1 id="goal-text">Meet the harbour keeper</h1><p>Select a person or the light to walk over and take a look.</p></section>
     <aside class="place"><span class="place-number">01</span><div>THE QUIET HARBOUR<small>A light waiting to awaken.</small></div></aside>
     <footer class="controls"><p id="status" role="status">Preparing the harbour…</p><button id="reset" disabled>Start again</button></footer>
     <section id="dialogue" class="dialogue" aria-label="Conversation" aria-live="polite" hidden><div><span id="speaker" class="eyebrow"></span><p id="speech"></p></div><button id="close-dialogue" aria-label="Close conversation">×</button></section>
   </div>
+  <div id="challenge-panel" class="challenge-panel" hidden><section id="challenge-content" role="dialog" aria-modal="true" aria-labelledby="challenge-title"></section></div>
   <div id="pause-panel" class="pause-panel" hidden><section role="dialog" aria-modal="true" aria-labelledby="pause-title"><span class="eyebrow">TAKE YOUR TIME</span><h2 id="pause-title">The harbour can wait.</h2><button id="resume">Continue exploring</button></section></div>
 </main>
 <script type="module" src="/src/main.ts"></script>
