@@ -1,14 +1,16 @@
 import { Vessels } from '../domain/vessels.ts';
 const words = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'];
 export class VesselEncounter {
-    private model = new Vessels();
+    private model: Vessels;
+    snapshot() { return this.model.snapshot(); }
     private active = false;
     private message = '';
     private lastFocus: HTMLElement | null = null;
     private readonly panel = document.getElementById('vessel-panel')!;
     private readonly content = document.getElementById('vessel-content')!;
     private readonly abort = new AbortController();
-    constructor(private readonly onOpen: () => void, private readonly onClose: () => void, private readonly onRestore: (count: number) => void) {
+    constructor(private readonly onOpen: () => void, private readonly onClose: () => void, private readonly onRestore: (count: number) => void, initial = new Vessels(), private readonly onChange: () => void = () => {}) {
+        this.model = initial;
         this.panel.addEventListener('click', event => {
             const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button');
             if (!button)
@@ -59,7 +61,7 @@ export class VesselEncounter {
                 this.model.guide();
                 this.message = '';
             }
-            this.render();
+            this.render(); this.onChange();
             if (event.detail === 0)
                 (this.content.querySelector<HTMLElement>(`[data-action="${action}"]`) ?? this.content.querySelector<HTMLElement>('[data-action="close"]'))?.focus();
         }, { signal: this.abort.signal });

@@ -60,7 +60,7 @@ test('moving scene freezes completely and survives repeated reset, resize and re
   await page.keyboard.press('Tab'); await expect(page.getByRole('button', { name: 'Continue exploring' })).toBeFocused();
   await page.keyboard.press('Escape'); await arrived(page, '14,12');
   for (let i = 0; i < 2; i++) {
-    await page.getByRole('button', { name: 'Start again' }).click(); await arrived(page, '7,11');
+    await page.getByRole('button', { name: 'Start again' }).click(); await page.getByRole('button',{name:'Start a new journey',exact:true}).click(); await arrived(page, '7,11');
     await expect(page.locator('#dialogue')).toBeHidden(); await expect(page.locator('#game')).toHaveAttribute('data-visited', '');
     await select(page, touch, 7, 10); await arrived(page, '7,10');
   }
@@ -69,7 +69,7 @@ test('moving scene freezes completely and survives repeated reset, resize and re
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await select(page, touch, 8, 11); await arrived(page, '8,11');
   await page.screenshot({ path: info.outputPath('harbour-mobile.png') });
-  await page.reload(); await arrived(page, '7,11'); await expect(page.locator('canvas')).toHaveCount(1);
+  await page.reload(); await arrived(page, '8,11'); await expect(page.locator('canvas')).toHaveCount(1);
   expect(errors).toEqual([]);
 });
 test('reduced motion keeps navigation available and stops decorative animation', async ({ page }, info) => {

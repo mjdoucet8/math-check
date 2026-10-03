@@ -18,6 +18,7 @@ export class HarbourScene extends Phaser.Scene {
   private residents!: ReturnType<typeof makeInteractables>;
   private cell: Cell = {x:7,y:11};
   private journey!: Journey;
+  private area: Area = 'harbour';
   private path: Cell[] = [];
   private pending: Interactable | null = null;
   private visited = new Set<string>();
@@ -29,7 +30,7 @@ export class HarbourScene extends Phaser.Scene {
   private telemetryAt = 0;
   constructor() { super(HarbourScene.KEY); }
   create() {
-    this.journey = this.registry.get('journey') as Journey;
+    this.journey = this.registry.get('journey') as Journey; this.area = this.journey.area;
     this.beaconAwake = this.journey.beaconAwake;
     this.cell = { ...(this.journey.positions.get(this.journey.area) ?? AREA_START[this.journey.area]) }; this.path = []; this.pending = null;
     this.visited = this.journey.visited.get(this.journey.area) ?? new Set<string>();
@@ -181,6 +182,7 @@ export class HarbourScene extends Phaser.Scene {
     }
   }
   private emitState() {
+    if (this.area !== this.journey.area) return;
     const camera = this.cameras.main, origin = camera.getWorldPoint(0, 0);
     const state: HarbourState = {
       rewardUnlocked: this.journey.rewardUnlocked, satchelColour: this.journey.satchelColour, area: this.journey.area, objects: AREA_OBJECTS[this.journey.area], beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,

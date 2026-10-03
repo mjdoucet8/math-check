@@ -39,7 +39,7 @@ test('first independent response restores the beacon; close/reopen preserves edi
   expect((await evidence(page)).outcome.kind).toBe('independent-first-response');
   await press(page.getByRole('button', { name: 'Continue exploring' }), touch);
   await expect(page.locator('#goal-text')).toHaveText('Follow the coastal path');
-  await press(page.getByRole('button', { name: 'Start again' }), touch);
+  await press(page.getByRole('button', { name: 'Start again' }), touch);await press(page.getByRole('button',{name:'Start a new journey',exact:true}),touch);
   await expect(page.locator('#game')).toHaveAttribute('data-beacon-awake', 'false');
   await expect(page.locator('#challenge-panel')).toBeHidden(); expect(errors).toEqual([]);
 });

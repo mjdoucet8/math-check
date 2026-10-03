@@ -293,3 +293,11 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 .satchel-choices svg {display:block;width:100%;max-width:105px;margin:0 auto 12px;}
 #reward-content>button {background:#ad945c;color:#142f36;border-color:#d6bf81;}
 @media(max-width:540px){#reward-content{padding:18px;max-height:calc(100dvh - 24px);}#reward-content h2{font-size:24px;}.satchel-choices{gap:8px;}.satchel-choices label{font-size:12px;padding:12px 4px;}}
+
+.controls>div {max-width:580px;}
+#save-status {display:block;font-size:10px;color:#c7d8ce;margin:5px 14px 0;max-width:420px;line-height:1.5;}
+#reset-panel {z-index:11;padding:20px;}
+#reset-panel section {max-width:440px;}
+#reset-panel p {font-size:14px;line-height:1.6;}
+#reset-panel .encounter-actions {justify-content:center;}
+@media(max-width:700px){.controls>div{max-width:calc(100% - 108px);}#status{max-width:100%;}#save-status{font-size:9px;margin-left:8px;}}

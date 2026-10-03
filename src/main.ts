@@ -5,6 +5,7 @@ import { StoneEncounter } from './ui/StoneEncounter.ts';
 import { Journey } from './domain/journey.ts';
 import { VesselEncounter } from './ui/VesselEncounter.ts';
 import { SatchelReward } from './ui/SatchelReward.ts';
+import { BrowserSave, encodeSnapshots } from './domain/browserSave.ts';
 import './style.css';
 
 function element<T extends HTMLElement>(id: string): T {
@@ -17,7 +18,23 @@ const pause = element<HTMLButtonElement>('pause'), reset = element<HTMLButtonEle
 const pausePanel = element('pause-panel'), dialogue = element('dialogue');
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const lifecycle = new AbortController();
-let journey = new Journey();
+let storage: Storage | null = null;
+try { storage = window.localStorage; } catch { /* This browser can still play without storage. */ }
+const saver = new BrowserSave(storage), loaded = saver.load();
+let journey = loaded.session.journey;
+const saveStatus = element('save-status');
+let lastSave = '', lastAttempt = '';
+let resetFailed=false, damagedSave=loaded.status==='damaged';
+let resetOpen = false, resetWasPaused = false;
+function saveJourney() {
+  const text = encodeSnapshots(journey, encounter.snapshot(), vessels.snapshot());
+  if (text === lastAttempt) return;
+  lastAttempt = text;
+  const saved = saver.save(text);
+  if (saved) {lastSave = text;resetFailed=false;}
+  const message = saved ? damagedSave ? 'A new journey is ready. The earlier save could not be read.' : 'Progress saved on this browser.' : resetFailed ? 'The saved journey could not be cleared. This new journey is for this page only.' : 'Saving is unavailable. This journey lasts until you close this page.';
+  if(saveStatus.textContent!==message)saveStatus.textContent=message;
+}
 const game = new Phaser.Game({
   type: Phaser.AUTO, parent: host, backgroundColor: '#245b65', antialias: true, antialiasGL: false,
   fps: { smoothStep: false, limit: 30 },
@@ -36,8 +53,8 @@ function releaseWorld() {
   (game.scene.getScene(HarbourScene.KEY) as HarbourScene).setCameraPaused(false);
   game.scene.resume(HarbourScene.KEY); element('world-ui').inert = false; host.inert = false;
 }
-const encounter = new StoneEncounter(holdWorld,releaseWorld,()=>game.events.emit('harbour-restored'));
-const vessels = new VesselEncounter(holdWorld,releaseWorld,count=>game.events.emit('garden-water',count));
+const encounter = new StoneEncounter(holdWorld,releaseWorld,()=>game.events.emit('harbour-restored'),loaded.session.stones,saveJourney);
+const vessels = new VesselEncounter(holdWorld,releaseWorld,count=>game.events.emit('garden-water',count),loaded.session.vessels,saveJourney);
 const reward = new SatchelReward(()=>journey.satchelColour,holdWorld,releaseWorld,colour=>game.events.emit('garden-equip',colour));
 game.events.on('garden-open-reward',()=>reward.open());
 game.events.on('garden-open-challenge',()=>vessels.open());
@@ -53,11 +70,12 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
-  host.dataset.ready = 'true'; host.dataset.checkpoint = 'reward';
+  host.dataset.ready = 'true'; host.dataset.checkpoint = 'saved-journey';
   pause.disabled = false; reset.disabled = false; status.textContent = hint;
 });
 // Read-only geometry exposed for browser verification; input still comes from real clicks/taps.
 game.events.on('harbour-state', (state: HarbourState) => {
+  if(state.area!==journey.area)return;
   const areaChanged=host.dataset.area!==state.area;
   if(areaChanged){
   host.dataset.area = state.area;host.dataset.objects=JSON.stringify(state.objects);
@@ -72,6 +90,7 @@ game.events.on('harbour-state', (state: HarbourState) => {
   host.dataset.beaconAwake = String(state.beaconAwake); host.dataset.cell = state.cell; host.dataset.destination = state.destination; host.dataset.position = JSON.stringify(state.position);
   host.dataset.view = JSON.stringify(state.view); host.dataset.moving = String(state.moving);
   host.dataset.visited = state.visited.join(',');
+  const [x,y]=state.cell.split(',').map(Number); journey.positions.set(state.area,{x:x!,y:y!}); saveJourney();
 });
 game.events.on('harbour-goal', (text: string) => { goal.textContent = text; });
 game.events.on('harbour-close-dialogue', closeDialogue);
@@ -86,11 +105,31 @@ const options = { signal: lifecycle.signal };
 pause.addEventListener('click', () => setPaused(!paused), options);
 element('resume').addEventListener('click', () => setPaused(false), options);
 element('close-dialogue').addEventListener('click', closeDialogue, options);
-reset.addEventListener('click', () => {
-  clearTimeout(feedbackTimer); encounter.reset(); vessels.reset(); reward.reset(); journey=new Journey();game.registry.set('journey',journey);closeDialogue(); if (paused) setPaused(false);
-  host.dataset.ready = 'false'; game.scene.getScene(HarbourScene.KEY).scene.restart();
-}, options);
+const resetPanel=element('reset-panel');
+function cancelReset() {
+  resetOpen=false;resetPanel.hidden=true;
+  if(resetWasPaused)setPaused(true);else {releaseWorld();reset.focus();}
+}
+reset.addEventListener('click',()=>{
+  resetWasPaused=paused;resetOpen=true;holdWorld();resetPanel.hidden=false;element('cancel-reset').focus();
+},options);
+element('cancel-reset').addEventListener('click',cancelReset,options);
+element('confirm-reset').addEventListener('click',()=>{
+  resetOpen=false;resetPanel.hidden=true;clearTimeout(feedbackTimer);
+  encounter.reset();vessels.reset();reward.reset();journey=new Journey();game.registry.set('journey',journey);
+  closeDialogue();if(paused)setPaused(false);else releaseWorld();
+  const cleared=saver.clear();resetFailed=!cleared;damagedSave=false;lastSave='';lastAttempt='';saveJourney();
+  if(!cleared && !lastSave)saveStatus.textContent="The saved journey could not be cleared. This new journey is for this page only.";
+  host.dataset.ready='false';game.scene.getScene(HarbourScene.KEY).scene.restart();reset.focus();
+},options);
+resetPanel.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){event.stopPropagation();cancelReset();}
+  if(event.key==='Tab'){
+    event.preventDefault();(document.activeElement===element('cancel-reset')?element('confirm-reset'):element('cancel-reset')).focus();
+  }
+},options);
 document.addEventListener('keydown', (event) => {
+  if(resetOpen)return;
   if (event.key === 'Escape') { if (paused) setPaused(false); else closeDialogue(); }
   if (paused && event.key === 'Tab') { event.preventDefault(); element('resume').focus(); }
 }, options);

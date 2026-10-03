@@ -3,14 +3,16 @@ const words = ['One', 'Two', 'Three', 'Four', 'Five'];
 const stoneArt = '<svg viewBox="0 0 64 48" aria-hidden="true"><ellipse cx="32" cy="39" rx="25" ry="7" fill="#132f3544"/><path d="M7 29 15 12 38 6 55 17 59 31 42 40 17 39Z" fill="#96b5ac"/><path d="m15 12 23-6 17 11-24 8-24 4Z" fill="#c4d1b7"/><path d="m31 25 24-8 4 14-17 9-11-15Z" fill="#7e9f98"/></svg>';
 
 export class StoneEncounter {
-  private challenge = new StoneChallenge();
+  private challenge: StoneChallenge;
+  snapshot() { return this.challenge.snapshot(); }
   private readonly panel: HTMLElement;
   private readonly content: HTMLElement;
   private readonly abort = new AbortController();
   private lastFocus: HTMLElement | null = null;
   private active = false;
   private message = '';
-  constructor(private readonly onOpen: () => void, private readonly onClose: () => void, private readonly onComplete: () => void) {
+  constructor(private readonly onOpen: () => void, private readonly onClose: () => void, private readonly onComplete: () => void, initial = new StoneChallenge(), private readonly onChange: () => void = () => {}) {
+    this.challenge = initial;
     this.panel = document.getElementById('challenge-panel')!;
     this.content = document.getElementById('challenge-content')!;
     this.panel.addEventListener('click', event => {
@@ -30,7 +32,7 @@ export class StoneEncounter {
       if (action === 'return') { this.challenge.returnToTask(); this.message = 'Now try your tray. Your stones are where you left them.'; }
       if (action === 'guide') { this.challenge.guide(); this.message = ''; }
       if (action === 'place') { this.challenge.placeGuidedStone(); this.say(words[this.challenge.selected.size - 1]!); }
-      this.render();
+      this.render(); this.onChange();
       // Keep focus on the action after DOM replacement, without forcing touch focus.
       if (event.detail === 0) {
         const selector = button.dataset.stone !== undefined ? `[data-stone="${button.dataset.stone}"]` : `[data-action="${action}"]`;

@@ -1,6 +1,6 @@
 # Numora
 
-Phase 5 completes the harbour, coastal path and hidden garden journey with a discoverable explorer satchel. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting an area preserves the current session's evidence and water arrangement. Finishing the garden reveals a satchel corner: preview Moss green, Ocean teal or Sunset ochre, then equip the chosen colour. The visible satchel travels with the character. Browser persistence is the next stage.
+Phase 6 saves the harbour, coastal path and hidden garden journey with a discoverable explorer satchel. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting or refreshing preserves the journey’s evidence and water arrangement. Finishing the garden reveals a satchel corner: preview Moss green, Ocean teal or Sunset ochre, then equip the chosen colour. The visible satchel travels with the character. Progress saves automatically on this browser at this address. Refresh resumes the area, answer arrangements, help/evidence, vessel position and satchel. Start again asks before clearing the saved journey. If storage is unavailable, play continues with an explanatory message.
 
 ## Run
 
@@ -41,6 +41,7 @@ npm test
 - `src/domain/journey.ts`: gated chapter travel and in-session area state.
 - `src/domain/vessels.ts`: sequential fixed-portion pumping and support evidence.
 - `src/world/areas.ts` and `src/world/gardenArt.ts`: coastal/garden walkability and layered scenery.
+- `src/domain/browserSave.ts` and `src/domain/saveValidation.ts`: versioned browser saves, validation and safe recovery.
 - `src/ui/SatchelReward.ts`: accessible colour preview and explicit equipping.
 - `src/ui/VesselEncounter.ts`: pumping, practice and guided counting.
 - `src/domain/stones.ts`: stone selection and submitted-attempt/help state.
@@ -54,9 +55,10 @@ npm test
 - `docs/counting-checkpoint.md`: approved harbour counting scope.
 - `docs/garden-checkpoint.md`: Phase 4 scope and verification.
 - `docs/reward-checkpoint.md`: Phase 5 reward scope and verification.
+- `docs/save-checkpoint.md`: Phase 6 saving and reset scope.
 
 ## Next checkpoint
 
-Review the garden reward and worn satchel before adding local browser saving. Provisional garden targets are 3, 5, 4, 6 and 5 portions. One new submitted mistake after the three-portion demonstration offers guided counting. Instructional support remains recorded through revisits and subsequent garden vessels. Start again clears the full session; reload still resets progress until browser persistence is added.
+Review refresh/resume and deliberate reset before the final prototype polish and classroom-device checks. Provisional garden targets are 3, 5, 4, 6 and 5 portions. One new submitted mistake after the three-portion demonstration offers guided counting. Instructional support remains recorded through revisits and subsequent garden vessels. Start again deliberately clears the saved journey. Saves belong to this browser and address; there are no accounts or cross-device transfers.
 
 Linear: https://linear.app/mathieu-doucet/project/numora-e3f40e0a62ed
