@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { WALK_CYCLE_DISTANCE } from '../world/walking.ts';
 import { attachIllustratedPerson, revealExplorer } from '../world/illustratedHarbour.ts';
 import { approach, key, project, route, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
 import { Journey, type Area, type SatchelColour } from '../domain/journey.ts';
@@ -26,6 +27,8 @@ export class HarbourScene extends Phaser.Scene {
   private beaconAwake = false;
   private phase = 0;
   private facing = 1;
+  private walkDistance = 0;
+  private walkSpeed = 0;
   private reducedMotion = false;
   private markerExpiry = 0;
   private telemetryAt = 0;
@@ -36,7 +39,7 @@ export class HarbourScene extends Phaser.Scene {
     this.cell = { ...(this.journey.positions.get(this.journey.area) ?? AREA_START[this.journey.area]) }; this.path = []; this.pending = null;
     this.visited = this.journey.visited.get(this.journey.area) ?? new Set<string>();
     this.journey.visited.set(this.journey.area,this.visited);
-    this.phase = 0; this.markerExpiry = 0; this.telemetryAt = 0;
+    this.phase = 0; this.walkDistance = 0; this.walkSpeed = 0; this.markerExpiry = 0; this.telemetryAt = 0;
     this.reducedMotion = Boolean(this.registry.get('reduced-motion'));
     this.water = this.add.graphics().setDepth(-1000);
     if (this.journey.area === 'harbour') {
@@ -200,16 +203,27 @@ export class HarbourScene extends Phaser.Scene {
   update(_time: number, delta: number) {
     const seconds = Math.min(delta, 250) / 1000; this.phase += seconds;
     this.cameras.main.setLerp(1 - Math.exp(-seconds / .24));
-    let travel = seconds * 175;
+    // Ease into a walk and brake only at the final destination, not each tile.
+    let remaining = 0, previous = { x: this.player.x, y: this.player.y };
+    for (const cell of this.path) {
+      const target = project(cell); remaining += Math.hypot(target.x - previous.x, target.y - previous.y); previous = target;
+    }
+    const desiredSpeed = this.path.length ? Math.min(135, Math.sqrt(2 * 700 * remaining)) : 0;
+    const previousSpeed = this.walkSpeed;
+    this.walkSpeed += Phaser.Math.Clamp(desiredSpeed - this.walkSpeed, -700 * seconds, 700 * seconds);
+    let travel = this.path.length ? (previousSpeed + this.walkSpeed) * .5 * seconds : 0;
+    let walked = 0;
     while (travel > 0 && this.path.length) {
       const next = this.path[0]!, target = project(next);
       const dx = target.x - this.player.x, dy = target.y - this.player.y, distance = Math.hypot(dx, dy);
       if (Math.abs(dx) > .01) this.facing = dx > 0 ? 1 : -1;
       if (distance <= travel) {
-        this.player.setPosition(target.x, target.y); this.cell = next; this.path.shift(); travel -= distance;
+        this.player.setPosition(target.x, target.y); this.cell = next; this.path.shift(); travel -= distance; walked += distance;
         if (!this.path.length) this.finishInteraction();
-      } else { this.player.x += dx / distance * travel; this.player.y += dy / distance * travel; travel = 0; }
+      } else { this.player.x += dx / distance * travel; this.player.y += dy / distance * travel; walked += travel; travel = 0; }
     }
+    this.walkDistance += walked;
+    if (!this.path.length) { this.walkSpeed = 0; this.walkDistance = 0; }
     this.player.setDepth(this.player.y + 1);
     if (this.journey.area === 'harbour') revealExplorer(this, this.player.x, this.player.y);
     for (const resident of this.residents) {
@@ -219,7 +233,7 @@ export class HarbourScene extends Phaser.Scene {
         && Math.abs(this.player.y - 82 - (resident.container.y + label.y)) < 26;
       label.setVisible(!overlapsHead);
     }
-    drawPerson(this.playerArt, this.reducedMotion ? 0 : this.phase, this.path.length > 0, false, this.facing, this.journey.satchelColour);
+    drawPerson(this.playerArt, this.reducedMotion ? 0 : this.path.length ? this.walkDistance / WALK_CYCLE_DISTANCE : this.phase, this.path.length > 0, false, this.facing, this.journey.satchelColour);
     for (const resident of this.residents) if (['keeper','gardener'].includes(resident.object.id)) drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
     if (this.journey.area === 'garden') animateGarden(this, this.journey.gardenCompleted, this.phase, this.reducedMotion);
     if (!this.reducedMotion && !(this.journey.area === 'harbour' && this.textures.exists('harbour-quay-art'))) this.drawWater();
