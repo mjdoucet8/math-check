@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { attachIllustratedPerson, revealExplorer } from '../world/illustratedHarbour.ts';
 import { approach, key, project, route, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
 import { Journey, type Area, type SatchelColour } from '../domain/journey.ts';
 import { AREA_OBJECTS, AREA_START, areaWalkable } from '../world/areas.ts';
@@ -46,9 +47,12 @@ export class HarbourScene extends Phaser.Scene {
     const start = project(this.cell);
     this.player = this.add.container(start.x, start.y).setDepth(start.y + 1);
     this.playerArt = this.add.graphics(); this.player.add(this.playerArt);
+    attachIllustratedPerson(this, this.player, this.playerArt);
     drawPerson(this.playerArt, 0, false, false, this.facing, this.journey.satchelColour);
     const camera = this.cameras.main;
-    camera.setBackgroundColor('#245b65').setBounds(-1000, -200, 2100, 1200);
+    camera.setBackgroundColor('#245b65');
+    if (this.journey.area === 'harbour' && this.textures.exists('harbour-quay-art')) camera.setBounds(-688, -150, 1536, 1024);
+    else camera.setBounds(-1000, -200, 2100, 1200);
     this.fitCamera(); camera.centerOn(start.x, start.y - 70);
     camera.startFollow(this.player, false, .06, .06, 0, 70);
     for (const resident of this.residents) resident.container.on('pointerdown', (_pointer: Phaser.Input.Pointer, _x: number, _y: number, event: Phaser.Types.Input.EventData) => {
@@ -207,10 +211,18 @@ export class HarbourScene extends Phaser.Scene {
       } else { this.player.x += dx / distance * travel; this.player.y += dy / distance * travel; travel = 0; }
     }
     this.player.setDepth(this.player.y + 1);
+    if (this.journey.area === 'harbour') revealExplorer(this, this.player.x, this.player.y);
+    for (const resident of this.residents) {
+      const label = resident.container.getByName('interaction-label') as Phaser.GameObjects.Text | null;
+      if (!label) continue;
+      const overlapsHead = Math.abs(this.player.x - resident.container.x) < label.width / 2 + 15
+        && Math.abs(this.player.y - 82 - (resident.container.y + label.y)) < 26;
+      label.setVisible(!overlapsHead);
+    }
     drawPerson(this.playerArt, this.reducedMotion ? 0 : this.phase, this.path.length > 0, false, this.facing, this.journey.satchelColour);
     for (const resident of this.residents) if (['keeper','gardener'].includes(resident.object.id)) drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
     if (this.journey.area === 'garden') animateGarden(this, this.journey.gardenCompleted, this.phase, this.reducedMotion);
-    if (!this.reducedMotion) this.drawWater();
+    if (!this.reducedMotion && !(this.journey.area === 'harbour' && this.textures.exists('harbour-quay-art'))) this.drawWater();
     this.marker.setAlpha(Phaser.Math.Clamp((this.markerExpiry - this.time.now) / 250, 0, 1));
     if (this.time.now >= this.telemetryAt) { this.telemetryAt = this.time.now + 50; this.emitState(); }
   }

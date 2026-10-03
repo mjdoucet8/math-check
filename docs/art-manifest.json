@@ -1,0 +1,74 @@
+[
+  {
+    "file": "public/art/explorer-frames-v1.png",
+    "bytes": 1910271,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "e73d05c5f1c831bf671442c1fc64fb47f5ea2303075c034c91a6d725b661dc5f",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/harbour-beacon-v1.png",
+    "bytes": 1926276,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "aa5cec31e0a2dbe85af3fb6266d4458f2a615f4f817093efc42772db708f9b04",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/harbour-cottage-v1.png",
+    "bytes": 1950293,
+    "pixels": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "f9299963a87d5df2836513700d714e063cd3298fc80bedf16aa4aa9a2dc4770c",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/harbour-keeper-v1.png",
+    "bytes": 1799431,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "d795a623577ee4e8d574e88dfd375f9be9f5ff431b267ca43c0628c297ffd5ea",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/harbour-props-v1.png",
+    "bytes": 2225037,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "aacebef4c1582b80bb97f5b0e0a8692938deee681b92ffa74755e4f957012cc8",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/harbour-quay-v1.png",
+    "bytes": 3297987,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "cdb2bfea41da61e9c9caebfcbd1aef96f82622ddb978289f5f662b324c274dff",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true
+  }
+]

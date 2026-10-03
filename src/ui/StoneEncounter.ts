@@ -66,8 +66,9 @@ export class StoneEncounter {
   private say(text: string) { audio.say(text); }
   private cancelSpeech() { audio.cancelSpeech(); }
   private stone(id: number, selected: boolean, practice = false) {
-    if (practice || this.challenge.phase === 'guided') return `<span class="stone ${selected ? 'counted' : ''}" aria-hidden="true">${stoneArt}</span>`;
-    return `<button class="stone" data-stone="${id}" aria-label="${selected ? 'Return stone to shore' : 'Move stone into tray'}">${stoneArt}</button>`;
+    const image = document.getElementById('game')?.dataset.propsArt === 'true' ? '<span class="shore-stone-art" aria-hidden="true"></span>' : stoneArt;
+    if (practice || this.challenge.phase === 'guided') return `<span class="stone ${selected ? 'counted' : ''}" aria-hidden="true">${image}</span>`;
+    return `<button class="stone" data-stone="${id}" aria-label="${selected ? 'Return stone to shore' : 'Move stone into tray'}">${image}</button>`;
   }
   private render() {
     const c = this.challenge;

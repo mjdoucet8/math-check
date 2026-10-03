@@ -1,6 +1,6 @@
 # Numora
 
-Phase 7 polishes the harbour, coastal path and hidden garden journey with a discoverable explorer satchel. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting or refreshing preserves the journey’s evidence and water arrangement. Finishing the garden reveals a satchel corner: preview Moss green, Ocean teal or Sunset ochre, then equip the chosen colour. The visible satchel travels with the character. Progress saves automatically on this browser at this address. Refresh resumes the area, answer arrangements, help/evidence, vessel position and satchel. Start again asks before clearing the saved journey. If storage is unavailable, play continues with an explanatory message.
+The illustrated harbour checkpoint updates the harbour artwork within the coastal path and hidden garden journey with a discoverable explorer satchel. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting or refreshing preserves the journey’s evidence and water arrangement. Finishing the garden reveals a satchel corner: preview Moss green, Ocean teal or Sunset ochre, then equip the chosen colour. The visible satchel travels with the character. Progress saves automatically on this browser at this address. Refresh resumes the area, answer arrangements, help/evidence, vessel position and satchel. Start again asks before clearing the saved journey. If storage is unavailable, play continues with an explanatory message.
 
 ## Run
 
@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. Dependencies and lockfile are pinned. No account, API key or environment file is needed. Runtime assets are bundled locally; the preview does not load fonts, artwork or game code from a CDN.
+Open the local URL printed by Vite. Dependencies and lockfile are pinned. No account, API key or environment file is needed. Runtime assets are bundled locally (the current full-resolution illustrated harbour is about 13.1 MB); the preview does not load fonts, artwork or game code from a CDN.
 
 ## Build and verify
 
@@ -35,7 +35,9 @@ npm test
 - `src/scenes/BootScene.ts`: entry/loading scene.
 - `src/scenes/HarbourScene.ts`: movement, camera, destination feedback and approach interactions.
 - `src/world/harbour.ts`: island, blocked footprints, projection and routing, independent of scenery.
-- `src/world/art.ts`: layered vector scenery, cached textures and idle/walk animation.
+- `src/world/art.ts`: layered objects, character rendering and geometric fallback.
+- `src/world/illustratedHarbour.ts`: detailed harbour scenery, raster poses, anchored feet and foreground visibility.
+- `public/art/`: generated runtime PNGs matching the concept style; original reference images remain local.
 - `src/scenes/FoundationScene.ts`: historical engine preview; no longer loaded.
 - `src/ui/StoneEncounter.ts`: accessible counting overlay, optional narration, practice and guided actions.
 - `src/domain/journey.ts`: gated chapter travel and in-session area state.
@@ -58,6 +60,8 @@ npm test
 - `docs/reward-checkpoint.md`: Phase 5 reward scope and verification.
 - `docs/save-checkpoint.md`: Phase 6 saving and reset scope.
 - `docs/prototype-review.md`: Phase 7 polish, verification and classroom review checklist.
+- `docs/harbour-art-checkpoint.md`: first detailed harbour art checkpoint, scope, asset record and review notes.
+- `docs/art-prompts.md` and `docs/art-manifest.json`: generation prompts and runtime asset provenance.
 
 ## Prototype review
 

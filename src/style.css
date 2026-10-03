@@ -328,3 +328,20 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
   #save-status {margin-top:3px;}
   .dialogue {bottom:115px;max-height:calc(100dvh - 175px);padding:14px;}
 }
+
+/* Illustrated harbour checkpoint: the original navy, cream and brass language. */
+body[data-area="harbour"] .goal,body[data-area="harbour"] #status,body[data-area="harbour"] .place {
+  background:#102a3bed;border-color:#cfad66aa;box-shadow:0 5px 22px #07182555;
+}
+body[data-area="harbour"] .wordmark {color:#f0d18b;text-shadow:0 2px 8px #061c2c;}
+body[data-area="harbour"] .goal {border:1px solid #cfad6688;}
+#challenge-content {background:#102839f5;border:2px solid #caaa64;box-shadow:inset 0 0 0 5px #162f41,0 18px 60px #07182577;}
+#challenge-content h2 {color:#f1dfb5;}
+#challenge-content header .eyebrow {font-size:11px;}
+#challenge-content .stone-zones section {background:#1d3e4e;border-color:#8f9a8f77;}
+#challenge-content .stone-zones .stone-tray {background:#82704424;border-color:#c5a768;}
+.shore-stone-art {display:block;width:100%;height:100%;background-image:url('/art/harbour-props-v1.png');background-size:438.857% 379.259%;background-position:48.904% 87.533%;background-repeat:no-repeat;pointer-events:none;}
+#challenge-content .stone:hover {background-color:#49697766;}
+#challenge-content .encounter-actions button:first-child {background:linear-gradient(#edce88,#b8944e);color:#102b3a;border-color:#f1d797;}
+#challenge-content header button {background:#18394b;border-color:#b7bdaf88;}
+body[data-area="harbour"] .dialogue {background:#102a3bf5;border-color:#cfad66;}

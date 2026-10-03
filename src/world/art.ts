@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { drawIllustratedTerrain, attachIllustratedPerson, drawIllustratedPerson, attachIllustratedProp } from './illustratedHarbour.ts';
 import { BUILDINGS, INTERACTABLES, PROPS, TILE_HEIGHT, TILE_WIDTH, land, project, type Interactable } from './harbour.ts';
 
 import { SATCHEL_COLOURS, type SatchelColour } from '../domain/journey.ts';
@@ -17,6 +18,7 @@ const polygon = (g: Graphics, colour: number, points: number[][], alpha = 1) => 
 
 /** Layered vector scenery: terrain and collision data remain independent. */
 export function drawTerrain(scene: Phaser.Scene): void {
+  if (drawIllustratedTerrain(scene)) return;
   const ground = scene.add.graphics().setDepth(-100);
   ground.translateCanvas(760, 100);
   const w = TILE_WIDTH / 2, h = TILE_HEIGHT / 2;
@@ -115,6 +117,14 @@ function drawBoat(scene: Phaser.Scene) {
 
 /** Draw on a reusable graphics object; feet stay anchored during idle/walk animation. */
 export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper = false, facing = 1, satchel: SatchelColour | null = null) {
+  if (drawIllustratedPerson(g, phase, walking, keeper, facing)) {
+    if (satchel && !keeper) {
+      const colour = SATCHEL_COLOURS.find(c => c.id === satchel)!.colour;
+      g.lineStyle(2.5, 0xc8ad74).lineBetween(-10 * facing, -67, 13 * facing, -36);
+      drawSatchel(g, 12 * facing, -34, colour, .28);
+    }
+    return;
+  }
   g.clear();
   g.fillStyle(0x314e48, .3).fillEllipse(0, 2, 28, 10);
   const stride = walking ? Math.sin(phase * 12) * 5 : 0;
@@ -139,6 +149,14 @@ export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper 
 
 export function drawBeacon(g: Graphics, awake = false) {
   g.clear();
+  if (g.getData('illustrated-beacon')) {
+    if (awake) {
+      g.fillStyle(0xffd57b, .2).fillCircle(0, -101, 36);
+      g.fillStyle(0xffdf87, .35).fillCircle(0, -101, 21);
+      polygon(g, 0xffe6ab, [[0,-122],[10,-101],[0,-80],[-10,-101]], .85);
+    }
+    return;
+  }
   if (awake) g.fillStyle(0xeacf7f, .18).fillCircle(0, -77, 58);
   g.fillStyle(0x3d574e, .3).fillEllipse(2, 5, 65, 20);
   g.fillStyle(0x8e977b).fillRoundedRect(-22, -23, 44, 25, 5);
@@ -163,12 +181,20 @@ export function makeInteractables(scene: Phaser.Scene, objects: readonly Interac
     else if (object.id === 'beacon') drawBeacon(art);
     else { art.fillStyle(0x95784d).fillRect(-5,-63,10,63); art.fillStyle(0xe0c88b).fillRoundedRect(-38,-62,76,30,4); art.lineStyle(3,0x34626a).lineBetween(-20,-47,22,-47).lineBetween(12,-55,22,-47).lineBetween(12,-39,22,-47); }
     container.add([halo, art]);
-    const label = scene.add.text(0, object.id === 'beacon' || object.id === 'arch' ? -167 : -86, object.name, {
+    if (object.id === 'keeper' || object.id === 'gardener') {
+      attachIllustratedPerson(scene, container, art, true); drawPerson(art, 0, false, true);
+    }
+    attachIllustratedProp(scene, container, art, object.id);
+    if (object.id === 'beacon') drawBeacon(art);
+    const illustrated = Boolean(art.getData('illustrated-person') || art.getData('illustrated-beacon'));
+    const labelY = object.id === 'beacon' ? illustrated ? -184 : -167 : object.id === 'arch' ? -167 : illustrated ? -116 : -86;
+    const label = scene.add.text(0, labelY, object.name, {
       fontFamily: 'Georgia, serif', fontSize: '13px', color: '#fff0ca', backgroundColor: '#244950', padding: { x: 9, y: 5 },
-    }).setOrigin(.5);
+    }).setOrigin(.5).setName('interaction-label');
     container.add(label);
-    const height = object.id === 'beacon' || object.id === 'arch' ? 185 : 105;
-    container.setInteractive(new Phaser.Geom.Rectangle(-45, -height, 90, height + 18), Phaser.Geom.Rectangle.Contains);
+    const height = object.id === 'beacon' ? illustrated ? 210 : 185 : object.id === 'arch' ? 185 : illustrated ? 140 : 105;
+    const width = object.id === 'coast' ? 130 : 90;
+    container.setInteractive(new Phaser.Geom.Rectangle(-width / 2, -height, width, height + 18), Phaser.Geom.Rectangle.Contains);
     container.on('pointerover', () => { halo.setAlpha(1); scene.input.setDefaultCursor('pointer'); });
     container.on('pointerout', () => { halo.setAlpha(.75); scene.input.setDefaultCursor('default'); });
     return { object, container, art };

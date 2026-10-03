@@ -72,15 +72,18 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
-  host.dataset.ready = 'true'; host.dataset.checkpoint = 'polished-prototype';
-  pause.disabled = false; reset.disabled = false; status.textContent = hint;
+  host.dataset.ready = 'true'; host.dataset.checkpoint = 'illustrated-harbour';
+  host.dataset.art = game.textures.exists('harbour-quay-art') ? 'illustrated' : 'geometric-fallback';
+  host.dataset.propsArt = String(game.textures.exists('harbour-props-art'));
+  if (game.registry.get('art-fallback')) status.textContent = 'Some artwork could not load. You can still explore.';
+  pause.disabled = false; reset.disabled = false; if (!game.registry.get('art-fallback')) status.textContent = hint;
 });
 // Read-only geometry exposed for browser verification; input still comes from real clicks/taps.
 game.events.on('harbour-state', (state: HarbourState) => {
   if(state.area!==journey.area)return;
   const areaChanged=host.dataset.area!==state.area;
   if(areaChanged){
-  host.dataset.area = state.area;host.dataset.objects=JSON.stringify(state.objects);
+  host.dataset.area = state.area;document.body.dataset.area = state.area;host.dataset.objects=JSON.stringify(state.objects);
   const details=state.area==='harbour'?['01','THE QUIET HARBOUR','A light waiting to awaken.']:state.area==='coastal-path'?['02','THE COASTAL PATH','Something grows beyond the shore.']:['03','THE HIDDEN GARDEN','Water can bring this place back.'];
   element('place-number').textContent=details[0]!;element('place-name').textContent=details[1]!;element('place-line').textContent=details[2]!;
   hint='Click or tap the paths to walk. Select a person, sign or machine to approach.';
