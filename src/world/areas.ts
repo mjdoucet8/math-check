@@ -11,6 +11,7 @@ export const AREA_OBJECTS: Record<Area, readonly Interactable[]> = {
     garden: [
         { id: 'coast', x: 2, y: 9, name: 'Back to the coast', line: '' },
         { id: 'gardener', x: 6, y: 8, name: 'Garden keeper', line: 'This fountain has forgotten its song. Try the old pump to bring water back.' },
+        { id: 'satchel', x: 12, y: 8, name: 'Explorer satchel', line: '' },
         { id: 'pump', x: 9, y: 7, name: 'Old garden pump', line: '' },
     ],
 };

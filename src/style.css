@@ -277,3 +277,19 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 .glass-vessel {width:150px;height:224px;border:3px solid #bfdacc;border-top:8px solid #d8e8d5;border-radius:8px 8px 28px 28px;background:#a3d3c21a;margin:20px auto;display:flex;flex-direction:column-reverse;overflow:hidden;padding:8px;gap:3px;box-shadow:inset 8px 0 0 #d4e9d322;}
 .water-portion {height:22px;flex:none;background:linear-gradient(100deg,#76adad,#91c5b5);border-radius:3px;border-top:2px solid #c4e1caaa;}
 @media(max-width:540px){#vessel-content{padding:18px;max-height:calc(100dvh - 24px);}#vessel-content h2{font-size:23px;}.glass-vessel{height:205px;margin:14px auto;}.water-portion{height:20px;}}
+
+#reward-content {width:min(620px,100%);max-height:calc(100dvh - 40px);overflow:auto;padding:26px;background:#193f49;border:1px solid #c9ae76;border-radius:16px;box-shadow:0 20px 70px #09273077;}
+#reward-content header {display:flex;justify-content:space-between;align-items:center;gap:10px;}
+#reward-content header button {font-size:25px;min-width:44px;padding:0;}
+#reward-content h2 {font:27px Georgia,serif;}
+#reward-content p {font-size:14px;line-height:1.6;color:#d3dfce;}
+#reward-content fieldset {border:0;padding:0;margin:22px 0;}
+#reward-content legend {font-size:13px;color:#d3dfce;margin-bottom:12px;}
+.satchel-choices {display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.satchel-choices label {position:relative;padding:12px 6px;background:#214d56;border:2px solid #7e9b8d;border-radius:12px;text-align:center;cursor:pointer;font-size:13px;}
+.satchel-choices label:has(input:checked) {border-color:#e6c784;background:#3b6467;}
+.satchel-choices label:has(input:focus-visible) {outline:3px solid #efcf8e;outline-offset:3px;}
+.satchel-choices input {accent-color:#dfc084;display:block;margin:0 auto 8px;width:18px;height:18px;}
+.satchel-choices svg {display:block;width:100%;max-width:105px;margin:0 auto 12px;}
+#reward-content>button {background:#ad945c;color:#142f36;border-color:#d6bf81;}
+@media(max-width:540px){#reward-content{padding:18px;max-height:calc(100dvh - 24px);}#reward-content h2{font-size:24px;}.satchel-choices{gap:8px;}.satchel-choices label{font-size:12px;padding:12px 4px;}}

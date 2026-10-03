@@ -1,6 +1,6 @@
 # Numora
 
-Phase 4 connects the harbour, coastal path and hidden garden. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting an area preserves the current session's evidence and water arrangement. Rewards and browser persistence are later stages.
+Phase 5 completes the harbour, coastal path and hidden garden journey with a discoverable explorer satchel. Restore the harbour light, select the coastal sign, then approach the overgrown arch. In the garden, meet the keeper and use the old pump to fill five vessels, one at a time. Pump always adds one portion, Empty clears the whole vessel, and Confirm submits. Revisiting an area preserves the current session's evidence and water arrangement. Finishing the garden reveals a satchel corner: preview Moss green, Ocean teal or Sunset ochre, then equip the chosen colour. The visible satchel travels with the character. Browser persistence is the next stage.
 
 ## Run
 
@@ -41,6 +41,7 @@ npm test
 - `src/domain/journey.ts`: gated chapter travel and in-session area state.
 - `src/domain/vessels.ts`: sequential fixed-portion pumping and support evidence.
 - `src/world/areas.ts` and `src/world/gardenArt.ts`: coastal/garden walkability and layered scenery.
+- `src/ui/SatchelReward.ts`: accessible colour preview and explicit equipping.
 - `src/ui/VesselEncounter.ts`: pumping, practice and guided counting.
 - `src/domain/stones.ts`: stone selection and submitted-attempt/help state.
 - `src/domain/progress.ts`: plain shared challenge/outcome/progress contract; no Phaser dependency or storage system. First-response success, retries, assistance and guided completion remain distinct.
@@ -52,9 +53,10 @@ npm test
 - `docs/movement-review.md`: approved movement checkpoint.
 - `docs/counting-checkpoint.md`: approved harbour counting scope.
 - `docs/garden-checkpoint.md`: Phase 4 scope and verification.
+- `docs/reward-checkpoint.md`: Phase 5 reward scope and verification.
 
 ## Next checkpoint
 
-Review the coast and garden journey before the explorer satchel/reward stage. Provisional garden targets are 3, 5, 4, 6 and 5 portions. One new submitted mistake after the three-portion demonstration offers guided counting. Instructional support remains recorded through revisits and subsequent garden vessels. Start again clears the full session; reload still resets progress until browser persistence is added.
+Review the garden reward and worn satchel before adding local browser saving. Provisional garden targets are 3, 5, 4, 6 and 5 portions. One new submitted mistake after the three-portion demonstration offers guided counting. Instructional support remains recorded through revisits and subsequent garden vessels. Start again clears the full session; reload still resets progress until browser persistence is added.
 
 Linear: https://linear.app/mathieu-doucet/project/numora-e3f40e0a62ed

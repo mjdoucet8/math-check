@@ -95,7 +95,7 @@ export class VesselEncounter {
         let title = `Put ${words[c.progress.target]!.toLowerCase()} portions into the vessel.`, body = '';
         if (c.phase === 'complete') {
             title = 'The garden has water again.';
-            body = '<div class="restoration-symbol" aria-hidden="true">✧</div><p>The fountain sings, and the plants begin to wake. There is more to discover here next.</p><button data-action="close">Explore the garden</button>';
+            body = '<div class="restoration-symbol" aria-hidden="true">✧</div><p>The fountain sings, and the plants begin to wake. An explorer satchel waits in a newly opened garden corner.</p><button data-action="close">Explore the garden</button>';
         }
         else if (c.phase === 'success') {
             title = 'Water reaches another corner.';

@@ -25,3 +25,6 @@ Domain checks cover the locked harbour gate, chapter adjacency, connectivity of 
 Browser scenarios cover the actual harbour → coast → arch → keeper → pump journey, the closed gate, revisiting with an unfinished answer, independent retries, five sequential vessels, practice and guided completion, narrow touch layout and full session reset. Existing harbour movement, pause, resize and counting checks remain active. Long workflows are split into bounded scenarios; the desktop deadline allows software-rendering headroom without weakening per-action assertions. WebGL multisampling is disabled while texture smoothing remains enabled, and rendering is limited to 30 fps.
 
 Physical classroom-tablet and audible narration checks remain manual. The complete Phaser bundle retains Vite's large-chunk warning (about 345 KB gzip).
+
+
+Phase 4 GitHub verification completed successfully: [run 37075195585](https://github.com/mjdoucet8/math-check/actions/runs/37075195585). The satchel continuation is documented in `reward-checkpoint.md`.

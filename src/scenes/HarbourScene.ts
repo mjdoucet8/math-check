@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
 import { approach, key, project, route, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
-import { Journey, type Area } from '../domain/journey.ts';
+import { Journey, type Area, type SatchelColour } from '../domain/journey.ts';
 import { AREA_OBJECTS, AREA_START, areaWalkable } from '../world/areas.ts';
-import { drawBeyondHarbour, refreshGarden } from '../world/gardenArt.ts';
+import { drawBeyondHarbour, refreshGarden, animateGarden } from '../world/gardenArt.ts';
 import { drawBeacon, drawPerson, drawTerrain, makeInteractables } from '../world/art.ts';
 
 export interface HarbourState {
-  area: Area; objects: readonly Interactable[]; beaconAwake: boolean; cell: string; destination: string; position: Point; moving: boolean;
+  rewardUnlocked: boolean; satchelColour: SatchelColour | null; area: Area; objects: readonly Interactable[]; beaconAwake: boolean; cell: string; destination: string; position: Point; moving: boolean;
   view: { left: number; top: number; zoom: number }; visited: string[];
 }
 export class HarbourScene extends Phaser.Scene {
@@ -45,7 +45,7 @@ export class HarbourScene extends Phaser.Scene {
     const start = project(this.cell);
     this.player = this.add.container(start.x, start.y).setDepth(start.y + 1);
     this.playerArt = this.add.graphics(); this.player.add(this.playerArt);
-    drawPerson(this.playerArt, 0, false);
+    drawPerson(this.playerArt, 0, false, false, this.facing, this.journey.satchelColour);
     const camera = this.cameras.main;
     camera.setBackgroundColor('#245b65').setBounds(-1000, -200, 2100, 1200);
     this.fitCamera(); camera.centerOn(start.x, start.y - 70);
@@ -61,9 +61,11 @@ export class HarbourScene extends Phaser.Scene {
     this.registry.events.on('changedata', this.registryChanged, this);
     this.game.events.on('harbour-restored', this.restoreBeacon, this);
     this.game.events.on('garden-water', this.updateGarden, this);
+    this.game.events.on('garden-equip', this.equipSatchel, this);
     this.events.once('shutdown', () => {
       this.game.events.off('harbour-restored', this.restoreBeacon, this);
       this.game.events.off('garden-water', this.updateGarden, this);
+      this.game.events.off('garden-equip', this.equipSatchel, this);
       this.scale.off('resize', this.fitCamera, this);
       this.registry.events.off('changedata', this.registryChanged, this);
       this.input.setDefaultCursor('default');
@@ -124,13 +126,14 @@ export class HarbourScene extends Phaser.Scene {
     }
     if(object.id==='harbour'){this.travel('harbour');return;}
     if(object.id==='arch'){this.travel('garden');return;}
+    if(object.id==='satchel'){if(this.journey.rewardUnlocked)this.game.events.emit('garden-open-reward');return;}
     if(object.id==='pump'){this.game.events.emit('garden-open-challenge');return;}
     this.visited.add(object.id);
     if (object.id === 'beacon' && this.visited.has('keeper') && !this.beaconAwake) {
       this.game.events.emit('harbour-open-challenge');
     } else this.game.events.emit('harbour-dialogue', {
       speaker: object.name,
-      speech: object.id==='gardener' && this.journey.gardenCompleted===5 ? 'You brought water back. The garden can begin to grow again.' : this.journey.area==='harbour' && this.beaconAwake ? object.id === 'keeper' ? 'You brought the light back. The coastal path is waiting for our next adventure.' : 'The crystal shines with a warm, steady light.' : object.line,
+      speech: object.id==='gardener' && this.journey.gardenCompleted===5 ? 'You brought water back. An explorer satchel is waiting in the newly opened garden corner.' : this.journey.area==='harbour' && this.beaconAwake ? object.id === 'keeper' ? 'You brought the light back. The coastal path is waiting for our next adventure.' : 'The crystal shines with a warm, steady light.' : object.line,
     });
     this.emitGoal();
     this.emitState();
@@ -138,14 +141,26 @@ export class HarbourScene extends Phaser.Scene {
   private emitGoal() {
     const area=this.journey.area;
     this.game.events.emit('harbour-goal', area==='harbour' ? this.beaconAwake ? 'Follow the coastal path' : this.visited.has('keeper') ? 'Restore the harbour light' : 'Meet the harbour keeper'
-      : area==='coastal-path' ? 'Explore the overgrown arch' : this.journey.gardenCompleted===5 ? 'The garden water is restored' : 'Bring water back to the garden');
+      : area==='coastal-path' ? 'Explore the overgrown arch' : this.journey.rewardUnlocked ? this.journey.satchelColour ? 'Explore the waking island' : 'Find the explorer satchel' : 'Bring water back to the garden');
   }
   private travel(destination: Area) {
     this.journey.positions.set(this.journey.area,{...this.cell});
     if(!this.journey.travel(destination))return;
     this.game.events.emit('harbour-close-dialogue');this.game.events.emit('harbour-travel');this.scene.restart();
   }
-  private updateGarden(completed: number) {this.journey.gardenCompleted=completed;if(this.journey.area==='garden')refreshGarden(this,completed);this.emitGoal();}
+  private updateGarden(completed: number) {
+    this.journey.gardenCompleted=completed;
+    if(this.journey.area==='garden') {
+      refreshGarden(this,completed);
+      this.residents.find(r=>r.object.id==='satchel')?.container.setVisible(this.journey.rewardUnlocked);
+    }
+    this.emitGoal(); this.emitState();
+  }
+  private equipSatchel(colour: SatchelColour) {
+    if (!this.journey.equipSatchel(colour)) return;
+    drawPerson(this.playerArt, 0, false, false, this.facing, this.journey.satchelColour);
+    this.emitGoal(); this.emitState();
+  }
   private restoreBeacon() {
     this.beaconAwake = true; this.journey.beaconAwake = true;
     const beacon = this.residents.find(resident => resident.object.id === 'beacon')!;
@@ -168,7 +183,7 @@ export class HarbourScene extends Phaser.Scene {
   private emitState() {
     const camera = this.cameras.main, origin = camera.getWorldPoint(0, 0);
     const state: HarbourState = {
-      area: this.journey.area, objects: AREA_OBJECTS[this.journey.area], beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
+      rewardUnlocked: this.journey.rewardUnlocked, satchelColour: this.journey.satchelColour, area: this.journey.area, objects: AREA_OBJECTS[this.journey.area], beaconAwake: this.beaconAwake, cell: key(this.cell), destination: key(this.path.at(-1) ?? this.cell), position: { x: this.player.x, y: this.player.y }, moving: this.path.length > 0,
       view: { left: origin.x, top: origin.y, zoom: camera.zoom }, visited: [...this.visited],
     };
     this.game.events.emit('harbour-state', state);
@@ -187,8 +202,9 @@ export class HarbourScene extends Phaser.Scene {
       } else { this.player.x += dx / distance * travel; this.player.y += dy / distance * travel; travel = 0; }
     }
     this.player.setDepth(this.player.y + 1);
-    drawPerson(this.playerArt, this.reducedMotion ? 0 : this.phase, this.path.length > 0, false, this.facing);
+    drawPerson(this.playerArt, this.reducedMotion ? 0 : this.phase, this.path.length > 0, false, this.facing, this.journey.satchelColour);
     for (const resident of this.residents) if (['keeper','gardener'].includes(resident.object.id)) drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
+    if (this.journey.area === 'garden') animateGarden(this, this.journey.gardenCompleted, this.phase, this.reducedMotion);
     if (!this.reducedMotion) this.drawWater();
     this.marker.setAlpha(Phaser.Math.Clamp((this.markerExpiry - this.time.now) / 250, 0, 1));
     if (this.time.now >= this.telemetryAt) { this.telemetryAt = this.time.now + 50; this.emitState(); }

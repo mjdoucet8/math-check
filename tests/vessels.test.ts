@@ -28,3 +28,22 @@ test('post-demo failure offers guidance, which requires actual pumping and prese
  c.empty();c.pump();c.confirm();assert.equal(c.guidedAvailable,true);c.guide();assert.equal(c.quantity,0);assert.equal(c.confirm(),'unchanged');
  for(let i=0;i<8;i++)c.pump();assert.equal(c.quantity,3);c.confirm();assert.equal(c.progress.outcome?.kind,'guided');c.next();assert.equal(c.progress.support,'guided');
 });
+
+test('satchel is gated by all five vessels and can only be equipped in its garden',()=>{
+ const j=new Journey();assert.equal(j.satchelColour,null);assert.equal(j.rewardUnlocked,false);
+ j.beaconAwake=true;j.travel('coastal-path');j.travel('garden');
+ for(let n=0;n<5;n++){j.gardenCompleted=n;assert.equal(j.equipSatchel('moss'),false);}
+ j.gardenCompleted=5;assert.equal(j.rewardUnlocked,true);assert.equal(j.equipSatchel('ocean'),true);
+ j.travel('coastal-path');j.travel('harbour');assert.equal(j.satchelColour,'ocean');assert.equal(j.equipSatchel('sunset'),false);
+ j.travel('coastal-path');j.travel('garden');assert.equal(j.equipSatchel('sunset'),true);assert.equal(j.equipSatchel('sunset'),true);
+ assert.equal(j.equipSatchel('invalid' as never),false);assert.equal(j.satchelColour,'sunset');
+ const reset=new Journey();assert.equal(reset.rewardUnlocked,false);assert.equal(reset.satchelColour,null);
+});
+test('guided garden completion unlocks the identical satchel choice',()=>{
+ const c=new Vessels();c.pump();c.confirm();c.pump();c.confirm();c.demonstrate();for(let n=0;n<3;n++)c.practicePump();c.returnToTask();
+ c.empty();c.pump();c.confirm();c.guide();for(let n=0;n<3;n++)c.pump();c.confirm();c.next();
+ for(const target of VESSEL_TARGETS.slice(1)){for(let n=0;n<target;n++)c.pump();c.confirm();c.next();}
+ assert.ok(c.completed.every(p=>p.outcome?.kind==='guided'));
+ const j=new Journey();j.beaconAwake=true;j.travel('coastal-path');j.travel('garden');j.gardenCompleted=c.completed.length;
+ assert.equal(j.equipSatchel('moss'),true);assert.equal(j.satchelColour,'moss');
+});

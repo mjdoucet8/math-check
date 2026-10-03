@@ -7,6 +7,15 @@ async function select(page:Page,touch:boolean,id:string){
  const p={x:((o.x-o.y)*40-view.left)*view.zoom,y:((o.x+o.y)*20-height-view.top)*view.zoom};
  if(touch)await page.touchscreen.tap(p.x,p.y);else await page.mouse.click(p.x,p.y);
 }
+async function walk(page:Page,touch:boolean,x:number,y:number){
+ // Allow the new area camera to render before reading its projection.
+ await page.waitForTimeout(700);
+ const view=JSON.parse((await page.locator('#game').getAttribute('data-view'))!);
+ const point={x:((x-y)*40-view.left)*view.zoom,y:((x+y)*20-view.top)*view.zoom};
+ const viewport=page.viewportSize()!;expect(point.x).toBeGreaterThan(0);expect(point.x).toBeLessThan(viewport.width);expect(point.y).toBeGreaterThan(200);expect(point.y).toBeLessThan(viewport.height-100);
+ if(touch)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);
+ await expect(page.locator('#game')).toHaveAttribute('data-cell',`${x},${y}`,{timeout:20000});await expect(page.locator('#game')).toHaveAttribute('data-moving','false');await page.waitForTimeout(700);
+}
 async function enterGarden(page:Page,touch:boolean,checkGate=false){
  await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
  if(checkGate){await select(page,touch,'coast');await expect(page.locator('#speech')).toContainText('Bring the harbour light',{timeout:20000});
@@ -17,6 +26,7 @@ async function enterGarden(page:Page,touch:boolean,checkGate=false){
  await press(page.getByRole('button',{name:'Confirm',exact:true}),touch);await press(page.getByRole('button',{name:'Continue exploring'}),touch);
  await select(page,touch,'coast');await expect(page.locator('#game')).toHaveAttribute('data-area','coastal-path',{timeout:20000});
  await select(page,touch,'arch');await expect(page.locator('#game')).toHaveAttribute('data-area','garden',{timeout:20000});
+ await expect(page.locator('#game')).toHaveAttribute('data-reward-unlocked','false');await expect(page.locator('#reward-panel')).toBeHidden();
  await select(page,touch,'gardener');await expect(page.locator('#speaker')).toHaveText('Garden keeper',{timeout:20000});await expect(page.locator('#speech')).toContainText('old pump');await press(page.getByRole('button',{name:'Close conversation'}),touch);
 }
 const current=(page:Page)=>page.locator('#vessel-panel');
@@ -51,15 +61,46 @@ test('pump demonstration preserves the answer and guided help restores the same 
  await press(page.getByRole('button',{name:'Empty',exact:true}),touch);await pump(page,touch,1);await press(page.getByRole('button',{name:'Confirm',exact:true}),touch);
  await press(page.getByRole('button',{name:'Count together'}),touch);await expect(page.getByRole('button',{name:'Confirm',exact:true})).toBeDisabled();await pump(page,touch,3);await complete(page,touch);
  const evidence=JSON.parse((await current(page).getAttribute('data-evidence'))!);expect(evidence.completed[0].outcome.kind).toBe('guided');expect(evidence.current.support).toBe('guided');
+ for(const target of [5,4,6,5]){await pump(page,touch,target);await complete(page,touch);}
+ await press(page.getByRole('button',{name:'Explore the garden'}),touch);
+ await select(page,touch,'satchel');await expect(page.locator('#reward-panel')).toBeVisible({timeout:20000});
+ await press(page.getByRole('button',{name:'Equip satchel'}),touch);await expect(page.locator('#game')).toHaveAttribute('data-satchel','moss');
 });
 
  test('five sequential vessels restore the garden and reset restores the sleeping harbour',async({page},info)=>{
+ test.setTimeout(240000);
  const touch=info.project.name==='touch';await enterGarden(page,touch);await select(page,touch,'pump');await expect(current(page)).toBeVisible({timeout:20000});
  if(touch)await page.setViewportSize({width:390,height:844});
  for(const target of [3,5,4,6,5]){await expect(page.locator('.glass-vessel')).toHaveCount(1);await pump(page,touch,target);await page.screenshot({path:info.outputPath(`vessel-${target}.png`)});await complete(page,touch);}
  await expect(page.getByRole('heading',{name:'The garden has water again.'})).toBeVisible();
  const evidence=JSON.parse((await current(page).getAttribute('data-evidence'))!);expect(evidence.completed).toHaveLength(5);expect(evidence.completed.every((p:{outcome:{kind:string}})=>p.outcome.kind==='independent-first-response')).toBe(true);
- await press(page.getByRole('button',{name:'Explore the garden'}),touch);await expect(page.locator('#goal-text')).toHaveText('The garden water is restored');
+ await press(page.getByRole('button',{name:'Explore the garden'}),touch);await expect(page.locator('#goal-text')).toHaveText('Find the explorer satchel');
  await page.screenshot({path:info.outputPath('restored-garden.png')});
- await press(page.getByRole('button',{name:'Start again'}),touch);await expect(page.locator('#game')).toHaveAttribute('data-area','harbour');await expect(page.locator('#game')).toHaveAttribute('data-beacon-awake','false');
+ await select(page,touch,'satchel');await expect(page.locator('#reward-panel')).toBeVisible({timeout:20000});
+ await expect(page.getByRole('radio')).toHaveCount(3);await expect(page.locator('#game')).toHaveAttribute('data-satchel','none');
+ await page.getByRole('radio',{name:'Sunset ochre'}).check();await expect(page.locator('#game')).toHaveAttribute('data-satchel','none');
+ if(touch)await press(page.getByRole('button',{name:'Back to garden'}),touch);else await page.keyboard.press('Escape');
+ await expect(page.locator('#reward-panel')).toBeHidden();await expect(page.locator('#game')).toHaveAttribute('data-satchel','none');
+ await select(page,touch,'satchel');await expect(page.locator('#reward-panel')).toBeVisible({timeout:20000});
+ if(touch)await page.getByRole('radio',{name:'Ocean teal'}).check();else {await page.keyboard.press('ArrowRight');await expect(page.getByRole('radio',{name:'Ocean teal'})).toBeChecked();}
+ await page.screenshot({path:info.outputPath('satchel-choices.png')});
+ if(touch)await press(page.getByRole('button',{name:'Equip satchel'}),touch);else {await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Equip satchel'})).toBeFocused();await page.keyboard.press('Enter');}
+ await expect(page.locator('#game')).toHaveAttribute('data-satchel','ocean');await expect(page.locator('#goal-text')).toHaveText('Explore the waking island');
+ await page.screenshot({path:info.outputPath('equipped-satchel.png')});
+ // The return sign is outside the narrow camera view from the reward corner.
+ if(touch){await select(page,touch,'gardener');await expect(page.locator('#speaker')).toHaveText('Garden keeper',{timeout:20000});await press(page.getByRole('button',{name:'Close conversation'}),touch);}
+ await select(page,touch,'coast');await expect(page.locator('#game')).toHaveAttribute('data-area','coastal-path',{timeout:20000});
+ if(touch)await walk(page,touch,7,6);
+ await select(page,touch,'harbour');await expect(page.locator('#game')).toHaveAttribute('data-area','harbour',{timeout:20000});await expect(page.locator('#game')).toHaveAttribute('data-satchel','ocean');
+ await select(page,touch,'coast');await expect(page.locator('#game')).toHaveAttribute('data-area','coastal-path',{timeout:20000});
+ if(touch)await walk(page,touch,7,6);
+ await select(page,touch,'arch');await expect(page.locator('#game')).toHaveAttribute('data-area','garden',{timeout:20000});
+ // On return, walk toward the pump before selecting the far reward corner.
+ if(touch){await walk(page,touch,7,9);await select(page,touch,'pump');await expect(current(page)).toBeVisible({timeout:20000});await press(page.getByRole('button',{name:'Explore the garden'}),touch);}
+ await select(page,touch,'satchel');await expect(page.locator('#reward-panel')).toBeVisible({timeout:20000});await expect(page.getByRole('radio',{name:'Ocean teal'})).toBeChecked();
+ for(const [name,id] of [['Moss green','moss'],['Sunset ochre','sunset']] as const){
+ await page.getByRole('radio',{name}).check();await press(page.getByRole('button',{name:'Wear this colour'}),touch);await expect(page.locator('#game')).toHaveAttribute('data-satchel',id);
+ await select(page,touch,'satchel');await expect(page.locator('#reward-panel')).toBeVisible({timeout:20000});}
+ await press(page.getByRole('button',{name:'Back to garden'}),touch);
+ await press(page.getByRole('button',{name:'Start again'}),touch);await expect(page.locator('#game')).toHaveAttribute('data-area','harbour');await expect(page.locator('#game')).toHaveAttribute('data-beacon-awake','false');await expect(page.locator('#game')).toHaveAttribute('data-satchel','none');await expect(page.locator('#game')).toHaveAttribute('data-reward-unlocked','false');
 });

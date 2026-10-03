@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { BUILDINGS, INTERACTABLES, PROPS, TILE_HEIGHT, TILE_WIDTH, land, project, type Interactable } from './harbour.ts';
 
+import { SATCHEL_COLOURS, type SatchelColour } from '../domain/journey.ts';
+
 type Graphics = Phaser.GameObjects.Graphics;
 function bake(scene: Phaser.Scene, g: Graphics, name: string, width: number, height: number, x: number, y: number) {
   if (scene.textures.exists(name)) scene.textures.remove(name);
@@ -112,7 +114,7 @@ function drawBoat(scene: Phaser.Scene) {
 }
 
 /** Draw on a reusable graphics object; feet stay anchored during idle/walk animation. */
-export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper = false, facing = 1) {
+export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper = false, facing = 1, satchel: SatchelColour | null = null) {
   g.clear();
   g.fillStyle(0x314e48, .3).fillEllipse(0, 2, 28, 10);
   const stride = walking ? Math.sin(phase * 12) * 5 : 0;
@@ -127,6 +129,11 @@ export function drawPerson(g: Graphics, phase: number, walking: boolean, keeper 
   g.fillStyle(0x303e3b).fillCircle(6 * facing, -50 - bob, 1.5);
   g.fillStyle(0xb98862).fillEllipse(9 * facing, -44 - bob, 4, 3);
   g.fillStyle(keeper ? 0x426b6a : 0xd5b16a).fillRoundedRect(-8, -40 - bob, 18, 4, 2);
+  if (satchel && !keeper) {
+    const colour = SATCHEL_COLOURS.find(c => c.id === satchel)!.colour;
+    g.lineStyle(3, 0xd3b984).lineBetween(-8 * facing, -40 - bob, 11 * facing, -20 - bob);
+    drawSatchel(g, 10 * facing, -21 - bob, colour, .23);
+  }
   if (keeper) { g.fillStyle(0xf0dfb8).fillRoundedRect(-6, -28 - bob, 13, 13, 2); }
 }
 
@@ -166,4 +173,14 @@ export function makeInteractables(scene: Phaser.Scene, objects: readonly Interac
     container.on('pointerout', () => { halo.setAlpha(.75); scene.input.setDefaultCursor('default'); });
     return { object, container, art };
   });
+}
+
+/** Shared shape for the discovery and the worn satchel. */
+export function drawSatchel(g: Graphics, x: number, y: number, colour: number, scale = 1) {
+  g.lineStyle(5 * scale, 0xb99a67).strokeEllipse(x, y - 24 * scale, 50 * scale, 56 * scale);
+  g.fillStyle(colour).fillRoundedRect(x - 30 * scale, y - 22 * scale, 60 * scale, 50 * scale, 8 * scale);
+  g.lineStyle(2 * scale, 0xe3d1a5).strokeRoundedRect(x - 30 * scale, y - 22 * scale, 60 * scale, 50 * scale, 8 * scale);
+  g.fillStyle(colour).fillRoundedRect(x - 30 * scale, y - 22 * scale, 60 * scale, 23 * scale, 6 * scale);
+  g.lineStyle(2 * scale, 0xe3d1a5).lineBetween(x - 29 * scale, y, x + 29 * scale, y);
+  g.fillStyle(0xe5c67c).fillRoundedRect(x - 4 * scale, y - 5 * scale, 8 * scale, 12 * scale, 2 * scale);
 }

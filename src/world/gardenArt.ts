@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { areaLand, AREA_OBJECTS } from './areas.ts';
 import { project } from './harbour.ts';
-import { makeInteractables, drawPerson } from './art.ts';
+import { makeInteractables, drawPerson, drawSatchel } from './art.ts';
 import type { Area } from '../domain/journey.ts';
 export function drawBeyondHarbour(scene: Phaser.Scene, area: Area, completed: number) {
     const g = scene.add.graphics().setDepth(-100);
@@ -51,6 +51,11 @@ export function drawBeyondHarbour(scene: Phaser.Scene, area: Area, completed: nu
             for (let i = 0; i < 14; i++)
                 a.fillStyle(i % 2 ? 0x557d61 : 0x799773).fillEllipse(-48 + i * 7, -139 - Math.sin(i / 14 * Math.PI) * 40, 23, 17);
         }
+        if (resident.object.id === 'satchel') {
+            a.clear().fillStyle(0x718b73).fillEllipse(0, 9, 105, 40).fillStyle(0xc0bf9c).fillEllipse(0, 0, 93, 35);
+            drawSatchel(a, 0, -32, 0x78936a, .65);
+            resident.container.setVisible(completed === 5);
+        }
         if (resident.object.id === 'pump') {
             a.clear().fillStyle(0x576f60).fillEllipse(5, 4, 100, 30).fillStyle(0xb49d62).fillRect(-9, -73, 18, 73);
             a.fillStyle(0xcfbb83).fillRoundedRect(-16, -83, 31, 30, 7);
@@ -75,4 +80,14 @@ export function refreshGarden(scene: Phaser.Scene, completed: number) {
     for (const item of scene.children.list)
         if (item.name.startsWith('garden-bloom-'))
             (item as Phaser.GameObjects.Graphics).setVisible(completed > Number(item.name.slice(13)) / 4);
+}
+
+/** Subtle flowing water and opening flowers; reduced motion uses a stable pose. */
+export function animateGarden(scene: Phaser.Scene, completed: number, phase: number, reduced: boolean) {
+    const water = scene.children.getByName('garden-water') as Phaser.GameObjects.Graphics | null;
+    if (water) water.setAlpha(reduced ? 1 : .88 + Math.sin(phase * 2) * .12);
+    for (const item of scene.children.list) if (item.name.startsWith('garden-bloom-')) {
+        const index = Number(item.name.slice(13));
+        if (completed > index / 4) (item as Phaser.GameObjects.Graphics).setScale(reduced ? 1 : 1 + Math.sin(phase * 1.3 + index) * .08);
+    }
 }

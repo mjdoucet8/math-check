@@ -12,7 +12,7 @@ async function arrived(page: Page, cell: string) {
   await expect(page.locator('#game')).toHaveAttribute('data-cell', cell, { timeout: 12000 });
   await expect(page.locator('#game')).toHaveAttribute('data-moving', 'false');
 }
-test('real input routes around obstacles, approaches objects, pauses, resets and resizes', async ({ page }, info) => {
+test('real input routes around obstacles and approaches objects while retargeting movement', async ({ page }, info) => {
   const touch = info.project.name === 'touch';
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
@@ -38,11 +38,13 @@ test('real input routes around obstacles, approaches objects, pauses, resets and
   // A new destination replaces the old route while preserving the current step.
   await select(page, touch, 12, 8);
   const oldDestination = await page.locator('#game').getAttribute('data-destination');
-  await select(page, touch, 13, 12);
+  // Aim inside the open path, away from nearby prop footprints as the camera follows.
+  await select(page, touch, 7, 12);
+  await expect(page.locator('#game')).not.toHaveAttribute('data-destination', oldDestination!);
   const newDestination = (await page.locator('#game').getAttribute('data-destination'))!;
   expect(newDestination).not.toBe(oldDestination);
   await arrived(page, newDestination);
-  await select(page, touch, 20, 15); await expect(page.getByRole('status')).toContainText('out of reach');
+  await select(page, touch, 0, 12); await expect(page.getByRole('status')).toContainText('out of reach');
   await arrived(page, newDestination);
   expect(errors).toEqual([]);
 });
