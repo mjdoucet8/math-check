@@ -1,0 +1,86 @@
+{
+  "date": "2026-09-30",
+  "timezone": "America/Moncton",
+  "upstream": "https://github.com/mjdoucet8/math-check",
+  "baseCommit": "2bfb8cc2280d31a074bac5921383a5186fd3e31c",
+  "method": "Exact UTF-8 contents from complete prior execution records; prototype brief also verified against its original Git blob.",
+  "files": [
+    {
+      "path": "package.json",
+      "bytes": 378,
+      "sha256": "87876b66d067856555bfa0d3bac4d4ce0c2c68ed4067259985e42f6213f18d30",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/package.json",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 210,
+      "sha256": "f2df74d3a1b2589763c14114be30656d4142672dd2a67a463644500277107145",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/tsconfig.json",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1420,
+      "sha256": "ec3895a59123456c089c47725f641bf116b7355b0c24c5781fa3c74a49795184",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/index.html",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "docs/checkpoint-1-review.md",
+      "bytes": 1284,
+      "sha256": "ec67e6ee9317090547dcb8bf09aed9fa717bb4b1887f90dd7351cbe30d893f65",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/docs/checkpoint-1-review.md",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "docs/prototype-brief.md",
+      "bytes": 2760,
+      "sha256": "542be20559c39b41ce16c5fb5431b8491ae1d79ac1f7f490e4df7f481b9ded34",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/docs/prototype-brief.md",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "src/world.ts",
+      "bytes": 1721,
+      "sha256": "c17cf2345b3880bd2a74b91d0eae6ee7db08bd65704a0bc71a42ac30f35f0ee9",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/src/world.ts",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 3496,
+      "sha256": "54cdc8bbfc5bd8ada6ecc77b6c61a57ab3e89bdc8ba9e0bc00d823d7d9ce47a8",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora/src/style.css",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "docs/original-upload-notes.md",
+      "bytes": 818,
+      "sha256": "6c30eef5ebce6e240990c6d079fdd7913c793841e23c144cdcb329444ecff47f",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora-upload/UPLOAD-NOTES.md",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "docs/design/2026-09-29-decisions.md",
+      "bytes": 3691,
+      "sha256": "3a693348b448db53edd1ee1b2ba162304425a70a17395abf283b80bfdecd175a",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora-upload/docs/design/2026-09-29-decisions.md",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    },
+    {
+      "path": "docs/design/concept-image-index.md",
+      "bytes": 893,
+      "sha256": "2229652471692e4fc79c58bac7eefc47e4d8674326e05b3f6281ede90e679c28",
+      "sourcePath": "/workspace/scratch/c2fd62d25a7d/numora-upload/docs/design/concept-image-index.md",
+      "sourceTurn": "01a0f437-2e29-7614-aab4-59b27672deb3"
+    }
+  ],
+  "notRecovered": [
+    "public/concepts/harbour.png",
+    "public/concepts/garden.png",
+    "public/vendor/phaser.min.js",
+    "public/vendor/PHASER-LICENSE.md",
+    "Numora_Planning_Package.zip"
+  ]
+}

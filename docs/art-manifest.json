@@ -1,0 +1,202 @@
+[
+  {
+    "file": "assets/art-source/explorer-frames-v1.png",
+    "bytes": 1910271,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "e73d05c5f1c831bf671442c1fc64fb47f5ea2303075c034c91a6d725b661dc5f",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/explorer-frames-v1.webp",
+      "bytes": 1234372,
+      "sha256": "8d3fee4a0d7badd35de394fb22d37fbf0ff66e5e7661f27eaeb3c3b89b17b3eb",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "14e4858dfe9050f7755cd3454a4ca994c01b192deb18828400aa3e2beeba3836",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/harbour-beacon-v1.png",
+    "bytes": 1926276,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "aa5cec31e0a2dbe85af3fb6266d4458f2a615f4f817093efc42772db708f9b04",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/harbour-beacon-v1.webp",
+      "bytes": 1264914,
+      "sha256": "fa8c9f3b48db0f6b4f13e1c5ee36e23aff64e992be95d082d2e90d00e8121ffe",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "e91b97022730353eaec03692ac3d35979a3a2190479fa44654fbe66aecdb2714",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/harbour-cottage-v1.png",
+    "bytes": 1950293,
+    "pixels": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "sha256": "f9299963a87d5df2836513700d714e063cd3298fc80bedf16aa4aa9a2dc4770c",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/harbour-cottage-v1.webp",
+      "bytes": 1451292,
+      "sha256": "c66006bbdc7282ec21d978b0f553c1d169e8bd35827cc69b271b3a0213e38118",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "5e587f6a616ac5f963bcf623c74bfa1c442a7216f63c4dd3172af0847306b638",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/harbour-keeper-v1.png",
+    "bytes": 1799431,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "d795a623577ee4e8d574e88dfd375f9be9f5ff431b267ca43c0628c297ffd5ea",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/harbour-keeper-v1.webp",
+      "bytes": 1093170,
+      "sha256": "e4af211001b6bf4963b9d24577e596abefea1f4fa4cf2cf6c33b6cada0cca10c",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "7bdb1193fbb05a908a965dcc1f293386be016afdbd5397cdcf888e788d78552d",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/harbour-props-v1.png",
+    "bytes": 2225037,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "aacebef4c1582b80bb97f5b0e0a8692938deee681b92ffa74755e4f957012cc8",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/harbour-props-v1.webp",
+      "bytes": 1471938,
+      "sha256": "fa0f7d2397c243b0f84a9f48f2617fdf6d5bda791b503da03e28849c19cbc866",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "2c1c2507aa105aa3e65cbb6a1ff21836cfb15def28ba3c225455c50048f6ed27",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/harbour-quay-v1.png",
+    "bytes": 3297987,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "cdb2bfea41da61e9c9caebfcbd1aef96f82622ddb978289f5f662b324c274dff",
+    "source": "built-in image generation; original concept image used as a style reference",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/harbour-quay-v1.webp",
+      "bytes": 2435832,
+      "sha256": "566a52107c1e359208118c6a66835e137bdb1844329ad68d8d223b1cd9f8bc7c",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "b8ea4d4d20d85d4b8328e9df260ea24ba092adffc7b21e3e45779c58e92c83bf",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/coastal-path-v1.png",
+    "bytes": 3454751,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "e7ed5bdeaeab0762b56f09570d976e9ad8d237bcc0f60fdf80348b5b7553ac88",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/coastal-path-v1.webp",
+      "bytes": 2454408,
+      "sha256": "96f023f28a0b6ba06fe3e4850637336ccb9d1850d5f45ff1544e6b13b328b124",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "b2242fb6f9e790eaaf8cbc03a84890a029fd96cc659b099a1320dc91cfe68e97",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/garden-courtyard-v1.png",
+    "bytes": 3329269,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "390c16c1dd26243481bd3cedd53c69a096873f0c9d5cb7b8ece5c2a6d1adac7d",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/garden-courtyard-v1.webp",
+      "bytes": 2330996,
+      "sha256": "cd2a72ec6d627dfca9cc82784293560f9f9556a15af8170077021085df6021c6",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "b6f83bfd89c0b241620db03e7edd46e9f754f0041a8d4de1d158854ca6c96c40",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/garden-props-v1.png",
+    "bytes": 2707626,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "9c69f70f0c9fb3def1a0888f8a451604a24aa406d70c7af2b8967b1aee6b988f",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/garden-props-v1.webp",
+      "bytes": 1890610,
+      "sha256": "610bdbb3a46a6108bf5fc8de42e8528cb71e8ce73030573c432c8e05cc5ffaf5",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "326c2b4f3f3d0767eb0c9e7d1de9348b4a8335ec6608ff67efd22f7cb78ddb20",
+      "pixel_identical_to_source": true
+    }
+  },
+  {
+    "file": "assets/art-source/garden-keeper-v1.png",
+    "bytes": 1906942,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "9b9a73f4d86007c61c8aaed90a972ee489859a4b9bb72c7c9d9c183c04d04332",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true,
+    "delivery": {
+      "file": "public/art/garden-keeper-v1.webp",
+      "bytes": 1150564,
+      "sha256": "1f8ae42e778e60aebfc86192bcf9d65dce9b15c0a68cb8bd7170b1d980e46a2e",
+      "encoding": "lossless WebP, quality=100, method=6, exact=True",
+      "decoded_rgba_sha256": "b145cab63c09db67cacd185b89773f422518263f4fc7464ec4b63734ca7c53d9",
+      "pixel_identical_to_source": true
+    }
+  }
+]

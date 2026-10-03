@@ -1,0 +1,28 @@
+{
+  "name": "numora",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0 <23"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test:unit": "node --experimental-strip-types tests/progress.test.ts && node --experimental-strip-types tests/harbour.test.ts && node --experimental-strip-types tests/stones.test.ts && node --experimental-strip-types tests/vessels.test.ts && node --experimental-strip-types tests/save.test.ts && node --experimental-strip-types tests/walking.test.ts",
+    "test:browser": "npm run build && playwright test",
+    "test": "npm run test:unit && npm run test:browser",
+    "playtest": "node scripts/serve-playtest.mjs"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.18.6",
+    "typescript": "5.9.3",
+    "vite": "7.3.6"
+  }
+}
