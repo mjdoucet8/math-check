@@ -67,9 +67,10 @@ export function revealExplorer(scene: Phaser.Scene, x: number, y: number) {
 
 export function attachIllustratedPerson(scene: Phaser.Scene, container: Phaser.GameObjects.Container,
   graphics: Phaser.GameObjects.Graphics, keeper = false) {
-  const key = keeper ? 'harbour-keeper-art' : 'explorer-art';
+  const gardenKeeper = keeper && scene.registry.get('journey')?.area === 'garden' && scene.textures.exists('garden-keeper-art');
+  const key = keeper ? gardenKeeper ? 'garden-keeper-art' : 'harbour-keeper-art' : 'explorer-art';
   if (!scene.textures.exists(key)) return;
-  const sprite = scene.add.image(0, 0, key).setOrigin(.5, keeper ? 1477 / 1536 : 457 / 512)
+  const sprite = scene.add.image(0, 0, key).setOrigin(.5, keeper ? (gardenKeeper ? 1489 : 1477) / 1536 : 457 / 512)
     .setScale(keeper ? .067 : .23);
   container.addAt(sprite, container.length === 1 ? 0 : 1);
   graphics.setData('illustrated-person', sprite);
@@ -109,8 +110,9 @@ export function attachIllustratedProp(scene: Phaser.Scene, container: Phaser.Gam
     const sprite = scene.add.image(0, 0, 'harbour-beacon-art').setOrigin(.5, 1465 / 1536).setScale(.112);
     container.addAt(sprite, 1); graphics.setData('illustrated-beacon', true);
   }
-  if (id === 'coast' && scene.textures.exists('harbour-props-art') && scene.registry.get('journey')?.area === 'harbour') {
+  if (['coast', 'harbour'].includes(id) && scene.textures.exists('harbour-props-art')) {
     const sprite = scene.add.image(0, 0, 'harbour-props-art', 'sign').setOrigin(.28, .94).setScale(.17);
+    sprite.setFlipX(id === 'harbour' || scene.registry.get('journey')?.area === 'garden');
     container.addAt(sprite, 1); graphics.clear();
     graphics.lineStyle(2.5, 0xf2d58e).lineBetween(-4, -45, 25, -45).lineBetween(16, -51, 25, -45).lineBetween(16, -39, 25, -45);
   }

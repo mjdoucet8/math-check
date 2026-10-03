@@ -70,5 +70,53 @@
     "sha256": "cdb2bfea41da61e9c9caebfcbd1aef96f82622ddb978289f5f662b324c274dff",
     "source": "built-in image generation; original concept image used as a style reference",
     "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/coastal-path-v1.png",
+    "bytes": 3454751,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "e7ed5bdeaeab0762b56f09570d976e9ad8d237bcc0f60fdf80348b5b7553ac88",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/garden-courtyard-v1.png",
+    "bytes": 3329269,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "sha256": "390c16c1dd26243481bd3cedd53c69a096873f0c9d5cb7b8ece5c2a6d1adac7d",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/garden-props-v1.png",
+    "bytes": 2707626,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "9c69f70f0c9fb3def1a0888f8a451604a24aa406d70c7af2b8967b1aee6b988f",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true
+  },
+  {
+    "file": "public/art/garden-keeper-v1.png",
+    "bytes": 1906942,
+    "pixels": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "sha256": "9b9a73f4d86007c61c8aaed90a972ee489859a4b9bb72c7c9d9c183c04d04332",
+    "source": "built-in image generation; original concepts used as style references; see docs/journey-art-prompts.md",
+    "unchanged_generated_png": true
   }
 ]

@@ -329,12 +329,12 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
   .dialogue {bottom:115px;max-height:calc(100dvh - 175px);padding:14px;}
 }
 
-/* Illustrated harbour checkpoint: the original navy, cream and brass language. */
-body[data-area="harbour"] .goal,body[data-area="harbour"] #status,body[data-area="harbour"] .place {
+/* Illustrated island: the original navy, cream and brass language. */
+body[data-area] .goal,body[data-area] #status,body[data-area] .place {
   background:#102a3bed;border-color:#cfad66aa;box-shadow:0 5px 22px #07182555;
 }
-body[data-area="harbour"] .wordmark {color:#f0d18b;text-shadow:0 2px 8px #061c2c;}
-body[data-area="harbour"] .goal {border:1px solid #cfad6688;}
+body[data-area] .wordmark {color:#f0d18b;text-shadow:0 2px 8px #061c2c;}
+body[data-area] .goal {border:1px solid #cfad6688;}
 #challenge-content {background:#102839f5;border:2px solid #caaa64;box-shadow:inset 0 0 0 5px #162f41,0 18px 60px #07182577;}
 #challenge-content h2 {color:#f1dfb5;}
 #challenge-content header .eyebrow {font-size:11px;}
@@ -344,4 +344,10 @@ body[data-area="harbour"] .goal {border:1px solid #cfad6688;}
 #challenge-content .stone:hover {background-color:#49697766;}
 #challenge-content .encounter-actions button:first-child {background:linear-gradient(#edce88,#b8944e);color:#102b3a;border-color:#f1d797;}
 #challenge-content header button {background:#18394b;border-color:#b7bdaf88;}
-body[data-area="harbour"] .dialogue {background:#102a3bf5;border-color:#cfad66;}
+body[data-area] .dialogue {background:#102a3bf5;border-color:#cfad66;}
+
+/* Garden interaction follows the original navy-and-gold pump panel. */
+#vessel-content, #reward-content {background:#102839f5;border:2px solid #caaa64;box-shadow:inset 0 0 0 5px #162f41,0 18px 60px #07182577;}
+#vessel-content h2 {color:#f1dfb5;}
+#vessel-content .encounter-actions [data-action="pump"], #vessel-content .encounter-actions [data-action="confirm"] {background:linear-gradient(#edce88,#b8944e);color:#102b3a;border-color:#f1d797;}
+.garden-pump-art {display:block;width:90px;height:110px;margin:0 auto;background-image:url('/art/garden-props-v1.png');background-size:300% 176.552%;background-position:100% 0;background-repeat:no-repeat;pointer-events:none;}

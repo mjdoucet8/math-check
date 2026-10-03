@@ -108,7 +108,7 @@ export class VesselEncounter {
         }
         else
             body = `<p>${c.phase === 'guided' ? 'We emptied this vessel. Pump once at a time and count with me.' : 'Each Pump gives the same portion. Empty clears the whole vessel.'}</p>${this.vessel(c.quantity)}<p class="encounter-feedback" role="status">${c.phase === 'guided' ? c.quantity ? words[c.quantity] : 'Pump the first portion.' : this.message}</p><div class="encounter-actions"><button data-action="pump" ${c.quantity >= 8 || c.phase === 'guided' && c.quantity === c.progress.target ? 'disabled' : ''}>Pump</button>${c.phase === 'task' ? '<button data-action="empty">Empty</button>' : ''}<button data-action="confirm" ${c.phase === 'guided' && c.quantity !== c.progress.target ? 'disabled' : ''}>Confirm</button>${c.helpAvailable ? '<button data-action="demo">Show me with a practice pump</button>' : ''}${c.guidedAvailable ? '<button data-action="guide">Count together</button>' : ''}</div>`;
-        this.content.innerHTML = `<header><span class="eyebrow">THE HIDDEN GARDEN</span><button data-action="close" aria-label="Back to garden">×</button></header><h2 id="vessel-title">${title}</h2>${body}${audioControls(c.phase === 'task')}`;
+        this.content.innerHTML = `<header><span class="eyebrow">THE HIDDEN GARDEN</span><button data-action="close" aria-label="Back to garden">×</button></header><h2 id="vessel-title">${title}</h2>${document.getElementById("game")?.dataset.journeyPropsArt === "true" && c.phase !== "complete" ? '<span class="garden-pump-art" aria-hidden="true"></span>' : ""}${body}${audioControls(c.phase === 'task')}`;
         audio.refresh();
     }
 }

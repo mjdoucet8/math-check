@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { terrainKey, terrainOrigin } from '../world/illustratedGarden.ts';
 import { WALK_CYCLE_DISTANCE } from '../world/walking.ts';
 import { attachIllustratedPerson, revealExplorer } from '../world/illustratedHarbour.ts';
 import { approach, key, project, route, unproject, type Cell, type Interactable, type Point } from '../world/harbour.ts';
@@ -54,7 +55,9 @@ export class HarbourScene extends Phaser.Scene {
     drawPerson(this.playerArt, 0, false, false, this.facing, this.journey.satchelColour);
     const camera = this.cameras.main;
     camera.setBackgroundColor('#245b65');
-    if (this.journey.area === 'harbour' && this.textures.exists('harbour-quay-art')) camera.setBounds(-688, -150, 1536, 1024);
+    if (this.textures.exists(terrainKey(this.journey.area))) {
+      const origin = terrainOrigin(this.journey.area); camera.setBounds(origin.x, origin.y, 1536, 1024);
+    }
     else camera.setBounds(-1000, -200, 2100, 1200);
     this.fitCamera(); camera.centerOn(start.x, start.y - 70);
     camera.startFollow(this.player, false, .06, .06, 0, 70);
@@ -236,7 +239,7 @@ export class HarbourScene extends Phaser.Scene {
     drawPerson(this.playerArt, this.reducedMotion ? 0 : this.path.length ? this.walkDistance / WALK_CYCLE_DISTANCE : this.phase, this.path.length > 0, false, this.facing, this.journey.satchelColour);
     for (const resident of this.residents) if (['keeper','gardener'].includes(resident.object.id)) drawPerson(resident.art, this.reducedMotion ? 0 : this.phase, false, true);
     if (this.journey.area === 'garden') animateGarden(this, this.journey.gardenCompleted, this.phase, this.reducedMotion);
-    if (!this.reducedMotion && !(this.journey.area === 'harbour' && this.textures.exists('harbour-quay-art'))) this.drawWater();
+    if (!this.reducedMotion && !this.textures.exists(terrainKey(this.journey.area))) this.drawWater();
     this.marker.setAlpha(Phaser.Math.Clamp((this.markerExpiry - this.time.now) / 250, 0, 1));
     if (this.time.now >= this.telemetryAt) { this.telemetryAt = this.time.now + 50; this.emitState(); }
   }

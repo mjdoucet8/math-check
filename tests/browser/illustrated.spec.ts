@@ -8,7 +8,7 @@ test('illustrated assets load and the harbour restoration remains playable at de
   const touch = info.project.name === 'touch';
   await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
   await expect(page.locator('#game')).toHaveAttribute('data-art', 'illustrated');
-  expect(assets.size).toBe(6);
+  expect(assets.size).toBe(10);
   await page.screenshot({ path: info.outputPath('illustrated-harbour.png') });
   await select(page, touch, 'keeper'); await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 20000 });
   await press(page.getByRole('button', { name: 'Close conversation' }), touch);

@@ -1,3 +1,4 @@
+import { terrainKey } from './world/illustratedGarden.ts';
 import { audio } from './ui/audio.ts';
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene.ts';
@@ -72,8 +73,8 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
-  host.dataset.ready = 'true'; host.dataset.checkpoint = 'illustrated-harbour';
-  host.dataset.art = game.textures.exists('harbour-quay-art') ? 'illustrated' : 'geometric-fallback';
+  host.dataset.ready = 'true'; host.dataset.checkpoint = 'illustrated-island';
+  host.dataset.art = game.textures.exists(terrainKey(journey.area)) ? 'illustrated' : 'geometric-fallback';
   host.dataset.propsArt = String(game.textures.exists('harbour-props-art'));
   if (game.registry.get('art-fallback')) status.textContent = 'Some artwork could not load. You can still explore.';
   pause.disabled = false; reset.disabled = false; if (!game.registry.get('art-fallback')) status.textContent = hint;
@@ -95,6 +96,9 @@ game.events.on('harbour-state', (state: HarbourState) => {
   host.dataset.beaconAwake = String(state.beaconAwake); host.dataset.cell = state.cell; host.dataset.destination = state.destination; host.dataset.position = JSON.stringify(state.position);
   host.dataset.view = JSON.stringify(state.view); host.dataset.moving = String(state.moving);
   host.dataset.visited = state.visited.join(',');
+  host.dataset.gardenRestored = String(journey.gardenCompleted);
+  host.dataset.journeyPropsArt = String(game.textures.exists('garden-props-art'));
+  host.dataset.art = game.textures.exists(terrainKey(state.area)) ? 'illustrated' : 'geometric-fallback';
   const [x,y]=state.cell.split(',').map(Number); journey.positions.set(state.area,{x:x!,y:y!}); saveJourney();
 });
 game.events.on('harbour-goal', (text: string) => { goal.textContent = text; });
