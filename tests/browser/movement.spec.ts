@@ -4,7 +4,7 @@ import { project } from '../../src/world/harbour.ts';
 test.use({ video: 'on' });
 test('walking stops at its destination and preserves position after reload', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
   await page.waitForTimeout(500);
   const host = page.locator('#game');
   const view = JSON.parse((await host.getAttribute('data-view'))!);

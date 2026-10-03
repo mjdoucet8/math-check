@@ -44,6 +44,14 @@ const game = new Phaser.Game({
   scene: [BootScene, HarbourScene],
   callbacks: { preBoot: (instance) => {instance.registry.set('reduced-motion', motion.matches);instance.registry.set('journey',journey);} },
 });
+game.events.on('art-load-start', (area: string) => {
+  element('loading-panel').hidden = false;
+  element('loading-title').textContent = area === 'harbour' ? 'Opening the harbour…' : area === 'garden' ? 'Opening the garden…' : 'Opening the coastal path…';
+  element<HTMLProgressElement>('art-progress').value = 0;
+  element('world-ui').inert = true; host.dataset.ready = 'false';
+  pause.disabled = true; reset.disabled = true;
+});
+game.events.on('art-load-progress', (value: number) => { element<HTMLProgressElement>('art-progress').value = value; });
 let paused = false, feedbackTimer: ReturnType<typeof setTimeout> | undefined;
 let hint = 'Click or tap the paths to walk. Select a person or the light to approach.';
 function holdWorld() {
@@ -58,6 +66,8 @@ function releaseWorld() {
 const encounter = new StoneEncounter(holdWorld,releaseWorld,()=>{ game.events.emit('harbour-restored'); audio.cue(); },loaded.session.stones,saveJourney);
 const vessels = new VesselEncounter(holdWorld,releaseWorld,count=>{ game.events.emit('garden-water',count); audio.cue(); },loaded.session.vessels,saveJourney);
 const reward = new SatchelReward(()=>journey.satchelColour,holdWorld,releaseWorld,colour=>game.events.emit('garden-equip',colour));
+// Save travel before a chapter download, so refreshing the loading screen resumes there.
+game.events.on('harbour-travel', saveJourney);
 game.events.on('garden-open-reward',()=>reward.open());
 game.events.on('garden-open-challenge',()=>vessels.open());
 game.events.on('harbour-open-challenge', () => encounter.open());
@@ -73,6 +83,7 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
+  element('loading-panel').hidden = true; element('world-ui').inert = false;
   host.dataset.ready = 'true'; host.dataset.checkpoint = 'illustrated-island';
   host.dataset.art = game.textures.exists(terrainKey(journey.area)) ? 'illustrated' : 'geometric-fallback';
   host.dataset.propsArt = String(game.textures.exists('harbour-props-art'));
@@ -137,7 +148,7 @@ element('confirm-reset').addEventListener('click',()=>{
   closeDialogue();if(paused)setPaused(false);else releaseWorld();
   const cleared=saver.clear();resetFailed=!cleared;damagedSave=false;lastSave='';lastAttempt='';saveJourney();
   if(!cleared && !lastSave)saveStatus.textContent="The saved journey could not be cleared. This new journey is for this page only.";
-  host.dataset.ready='false';game.scene.getScene(HarbourScene.KEY).scene.restart();reset.focus();
+  host.dataset.ready='false';game.scene.getScene(HarbourScene.KEY).scene.start('boot');reset.focus();
 },options);
 resetPanel.addEventListener('keydown',event=>{
   if(event.key==='Escape'){event.stopPropagation();cancelReset();}

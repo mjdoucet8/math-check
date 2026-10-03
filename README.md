@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. Dependencies and lockfile are pinned. No account, API key or environment file is needed. Runtime assets are bundled locally (the full-resolution illustrated island artwork is about 24.5 MB); the preview does not load fonts, artwork or game code from a CDN.
+Open the local URL printed by Vite. Dependencies and lockfile are pinned. No account, API key or environment file is needed. Runtime assets are bundled locally (pixel-identical WebP artwork totals 16.8 MB, with 9.0 MB needed to open the harbour); the preview does not load fonts, artwork or game code from a CDN.
 
 ## Build and verify
 
@@ -69,3 +69,9 @@ npm test
 Sound on/off controls optional instruction narration, spoken practice/guidance and gentle restoration chimes. Written tasks remain available when browser audio is missing or fails. Larger activity text, touch controls and compact landscape layouts support the final review. See `docs/prototype-review.md` for verification, known limits and the physical-device check sheet. Provisional garden targets are 3, 5, 4, 6 and 5 portions. One new submitted mistake after the three-portion demonstration offers guided counting. Instructional support remains recorded through revisits and subsequent garden vessels. Start again deliberately clears the saved journey. Saves belong to this browser and address; there are no accounts or cross-device transfers.
 
 Linear: https://linear.app/mathieu-doucet/project/numora-e3f40e0a62ed
+
+## Device playtest
+
+Run `npm run build`, then `npm run playtest` to serve the distributable game on this computer. For a tablet on the same trusted Wi-Fi, run `npm run playtest -- --host 0.0.0.0` and use the computer’s local IP and port 4173 on the tablet. This is a manual choice to make the preview reachable on that network. Public hosting is separate. See [device readiness](docs/device-readiness.md) for verification, image budgets and the physical-device check sheet.
+
+Artwork masters are preserved under `assets/art-source/`; only their lossless WebP delivery versions under `public/art/` enter the web build. `python3 scripts/verify-art.py` checks every decoded pixel and checksum using Pillow. The browser has no new dependency. Chapter artwork loads on entry and remains cached in the current game session.

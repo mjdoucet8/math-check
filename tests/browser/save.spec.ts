@@ -7,7 +7,7 @@ function supportedGarden() {
  c.pump();c.confirm();c.pump();c.confirm();c.demonstrate();c.practicePump();return encodeSession(s);
 }
 test('real harbour edits and submitted retries survive reload without extra attempts',async({page},info)=>{
- const touch=info.project.name==='touch';await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
+ const touch=info.project.name==='touch';await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
  await select(page,touch,'keeper');await expect(page.locator('#speaker')).toHaveText('Harbour keeper',{timeout:20000});await press(page.getByRole('button',{name:'Close conversation'}),touch);
  await select(page,touch,'beacon');await expect(page.locator('#challenge-panel')).toBeVisible({timeout:20000});
  for(let i=0;i<3;i++)await press(page.getByRole('button',{name:'Move stone into tray',exact:true}).first(),touch);
@@ -20,7 +20,7 @@ test('real harbour edits and submitted retries survive reload without extra atte
 });
 test('garden practice, success boundary, satchel and deliberate reset persist in browser',async({page},info)=>{
  test.setTimeout(240000);const touch=info.project.name==='touch';const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await page.evaluate(({key,text})=>localStorage.setItem(key,text),{key:SAVE_KEY,text:supportedGarden()});await page.reload();
+ await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await page.evaluate(({key,text})=>localStorage.setItem(key,text),{key:SAVE_KEY,text:supportedGarden()});await page.reload();
  await expect(page.locator('#game')).toHaveAttribute('data-area','garden');await select(page,touch,'pump');await expect(current(page)).toHaveAttribute('data-phase','demo',{timeout:20000});await expect(page.locator('.water-portion')).toHaveCount(1);
  for(const word of ['Two','Three']){await press(page.getByRole('button',{name:'Pump the practice vessel'}),touch);await expect(page.locator('.count-word')).toHaveText(word);}
  await press(page.getByRole('button',{name:'Try your vessel'}),touch);await expect(page.locator('.water-portion')).toHaveCount(2);await pump(page,touch,3);await press(page.getByRole('button',{name:'Confirm',exact:true}),touch);
@@ -37,15 +37,15 @@ test('garden practice, success boundary, satchel and deliberate reset persist in
  expect(errors).toEqual([]);
 });
 test('damaged and unsupported saves recover without invented unlocks',async({page})=>{
- await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
+ await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
  for(const text of ['{',JSON.stringify({version:99})]){await page.evaluate(({key,text})=>localStorage.setItem(key,text),{key:SAVE_KEY,text});await page.reload();await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await expect(page.locator('#game')).toHaveAttribute('data-beacon-awake','false');await expect(page.locator('#game')).toHaveAttribute('data-satchel','none');await expect(page.locator('#save-status')).toContainText('earlier save could not be read');}
 });
 test('quota failures leave navigation and deliberate reset playable',async({page},info)=>{
  await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>({getItem:()=>null,setItem:()=>{throw new DOMException('Full','QuotaExceededError');},removeItem:()=>{throw new DOMException('Full','QuotaExceededError');}})}));
- const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-status')).toContainText('Saving is unavailable');
+ const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-status')).toContainText('Saving is unavailable');
  await select(page,info.project.name==='touch','keeper');await expect(page.locator('#speaker')).toHaveText('Harbour keeper',{timeout:20000});await page.getByRole('button',{name:'Close conversation'}).click();
  await page.getByRole('button',{name:'Start again'}).click();await page.getByRole('button',{name:'Start a new journey',exact:true}).click();await expect(page.locator('#game')).toHaveAttribute('data-cell','7,11');await expect(page.locator('#save-status')).toContainText('could not be cleared');expect(errors).toEqual([]);
 });
 test('denied storage access still starts a playable journey',async({page})=>{
- await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new DOMException('Denied','SecurityError');}}));const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-status')).toContainText('Saving is unavailable');expect(errors).toEqual([]);
+ await page.addInitScript(()=>Object.defineProperty(window,'localStorage',{get:()=>{throw new DOMException('Denied','SecurityError');}}));const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');await expect(page.locator('#save-status')).toContainText('Saving is unavailable');expect(errors).toEqual([]);
 });

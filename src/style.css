@@ -340,7 +340,7 @@ body[data-area] .goal {border:1px solid #cfad6688;}
 #challenge-content header .eyebrow {font-size:11px;}
 #challenge-content .stone-zones section {background:#1d3e4e;border-color:#8f9a8f77;}
 #challenge-content .stone-zones .stone-tray {background:#82704424;border-color:#c5a768;}
-.shore-stone-art {display:block;width:100%;height:100%;background-image:url('/art/harbour-props-v1.png');background-size:438.857% 379.259%;background-position:48.904% 87.533%;background-repeat:no-repeat;pointer-events:none;}
+.shore-stone-art {display:block;width:100%;height:100%;background-image:url('/art/harbour-props-v1.webp');background-size:438.857% 379.259%;background-position:48.904% 87.533%;background-repeat:no-repeat;pointer-events:none;}
 #challenge-content .stone:hover {background-color:#49697766;}
 #challenge-content .encounter-actions button:first-child {background:linear-gradient(#edce88,#b8944e);color:#102b3a;border-color:#f1d797;}
 #challenge-content header button {background:#18394b;border-color:#b7bdaf88;}
@@ -350,4 +350,9 @@ body[data-area] .dialogue {background:#102a3bf5;border-color:#cfad66;}
 #vessel-content, #reward-content {background:#102839f5;border:2px solid #caaa64;box-shadow:inset 0 0 0 5px #162f41,0 18px 60px #07182577;}
 #vessel-content h2 {color:#f1dfb5;}
 #vessel-content .encounter-actions [data-action="pump"], #vessel-content .encounter-actions [data-action="confirm"] {background:linear-gradient(#edce88,#b8944e);color:#102b3a;border-color:#f1d797;}
-.garden-pump-art {display:block;width:90px;height:110px;margin:0 auto;background-image:url('/art/garden-props-v1.png');background-size:300% 176.552%;background-position:100% 0;background-repeat:no-repeat;pointer-events:none;}
+.garden-pump-art {display:block;width:90px;height:110px;margin:0 auto;background-image:url('/art/garden-props-v1.webp');background-size:300% 176.552%;background-position:100% 0;background-repeat:no-repeat;pointer-events:none;}
+
+.loading-panel {position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:#153740;color:#f2e9cd;text-align:center;padding:24px;}
+.loading-panel h2 {font:clamp(24px,5vw,36px) Georgia,serif;}
+.loading-panel progress {width:min(300px,75vw);height:14px;accent-color:#dfbd79;}
+.loading-panel p {font-size:14px;color:#c3d5ca;}

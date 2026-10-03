@@ -15,7 +15,7 @@ async function arrived(page: Page, cell: string) {
 test('real input routes around obstacles and approaches objects while retargeting movement', async ({ page }, info) => {
   const touch = info.project.name === 'touch';
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
   await arrived(page, '7,11');
   await page.screenshot({ path: info.outputPath('harbour.png') });
   // Route to the far side of a blocked cottage footprint.
@@ -50,7 +50,7 @@ test('real input routes around obstacles and approaches objects while retargetin
 });
 test('moving scene freezes completely and survives repeated reset, resize and reload', async ({page},info)=>{
   const touch=info.project.name==='touch';const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
+  await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
   await select(page, touch, 14, 12);
   await expect(page.locator('#game')).toHaveAttribute('data-moving', 'true');
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
@@ -73,7 +73,7 @@ test('moving scene freezes completely and survives repeated reset, resize and re
   expect(errors).toEqual([]);
 });
 test('reduced motion keeps navigation available and stops decorative animation', async ({ page }, info) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto('/'); await arrived(page, '7,11');
+  await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto('./'); await arrived(page, '7,11');
   await page.waitForTimeout(700);
   const still = await page.locator('canvas').screenshot(); await page.waitForTimeout(200);
   expect((await page.locator('canvas').screenshot()).equals(still)).toBe(true);

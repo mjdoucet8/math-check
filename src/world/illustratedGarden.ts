@@ -3,9 +3,9 @@ import { project } from './harbour.ts';
 import type { Area } from '../domain/journey.ts';
 
 export const JOURNEY_ART = [
-  ['coastal-path-art', 'coastal-path-v1.png'],
-  ['garden-courtyard-art', 'garden-courtyard-v1.png'],
-  ['garden-keeper-art', 'garden-keeper-v1.png'],
+  ['coastal-path-art', 'coastal-path-v1.webp'],
+  ['garden-courtyard-art', 'garden-courtyard-v1.webp'],
+  ['garden-keeper-art', 'garden-keeper-v1.webp'],
 ] as const;
 export const terrainKey = (area: Area) => area === 'harbour' ? 'harbour-quay-art' : area === 'garden' ? 'garden-courtyard-art' : 'coastal-path-art';
 

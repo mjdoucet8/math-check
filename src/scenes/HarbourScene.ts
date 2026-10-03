@@ -160,7 +160,7 @@ export class HarbourScene extends Phaser.Scene {
   private travel(destination: Area) {
     this.journey.positions.set(this.journey.area,{...this.cell});
     if(!this.journey.travel(destination))return;
-    this.game.events.emit('harbour-close-dialogue');this.game.events.emit('harbour-travel');this.scene.restart();
+    this.game.events.emit('harbour-close-dialogue');this.game.events.emit('harbour-travel');this.scene.start('boot');
   }
   private updateGarden(completed: number) {
     this.journey.gardenCompleted=completed;

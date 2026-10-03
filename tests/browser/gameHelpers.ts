@@ -17,7 +17,7 @@ export async function walk(page:Page,touch:boolean,x:number,y:number){
  await expect(page.locator('#game')).toHaveAttribute('data-cell',`${x},${y}`,{timeout:20000});await expect(page.locator('#game')).toHaveAttribute('data-moving','false');await page.waitForTimeout(700);
 }
 export async function enterGarden(page:Page,touch:boolean,checkGate=false){
- await page.goto('/');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
+ await page.goto('./');await expect(page.locator('#game')).toHaveAttribute('data-ready','true');
  if(checkGate){await select(page,touch,'coast');await expect(page.locator('#speech')).toContainText('Bring the harbour light',{timeout:20000});
  await expect(page.locator('#game')).toHaveAttribute('data-area','harbour');await press(page.getByRole('button',{name:'Close conversation'}),touch);}
  await select(page,touch,'keeper');await expect(page.locator('#speaker')).toHaveText('Harbour keeper',{timeout:20000});await press(page.getByRole('button',{name:'Close conversation'}),touch);

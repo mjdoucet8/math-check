@@ -6,9 +6,9 @@ test('illustrated assets load and the harbour restoration remains playable at de
   page.on('pageerror', error => errors.push(error.message));
   page.on('response', response => { if (response.url().includes('/art/') && response.status() === 200) assets.add(response.url().split('/').at(-1)!); });
   const touch = info.project.name === 'touch';
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
   await expect(page.locator('#game')).toHaveAttribute('data-art', 'illustrated');
-  expect(assets.size).toBe(10);
+  expect(assets.size).toBe(6);
   await page.screenshot({ path: info.outputPath('illustrated-harbour.png') });
   await select(page, touch, 'keeper'); await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 20000 });
   await press(page.getByRole('button', { name: 'Close conversation' }), touch);
@@ -31,8 +31,8 @@ test('illustrated assets load and the harbour restoration remains playable at de
 });
 
 test('an unavailable scenery file retains a playable geometric fallback with a clear notice', async ({ page }, info) => {
-  await page.route('**/art/harbour-quay-v1.png', route => route.abort());
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
+  await page.route('**/art/harbour-quay-v1.webp', route => route.abort());
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
   await expect(page.locator('#game')).toHaveAttribute('data-art', 'geometric-fallback');
   await expect(page.getByRole('status')).toContainText('Some artwork could not load');
   await select(page, info.project.name === 'touch', 'keeper');

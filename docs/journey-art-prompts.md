@@ -1,6 +1,6 @@
 # Coastal Path and Hidden Garden · generation record
 
-Mode: built-in image generation. Original concept images were used only as style references; code-derived diagrams supplied terrain geometry. Runtime PNGs preserve the generated pixels and alpha unchanged. Engine atlas frames accommodate the actual object extents rather than rewriting the image. No graphics software or new dependency was installed.
+Mode: built-in image generation. Original concept images were used only as style references; code-derived diagrams supplied terrain geometry. PNG masters under `assets/art-source/` preserve generated pixels and alpha unchanged; lossless WebP copies under `public/art/` decode identically. Engine atlas frames accommodate the actual object extents rather than rewriting the image. No graphics software or new dependency was installed.
 
 ## Coastal Path background
 

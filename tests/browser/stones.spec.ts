@@ -9,7 +9,7 @@ async function select(page: Page, touch: boolean, x: number, y: number, height: 
   if (touch) await page.touchscreen.tap(point.x, point.y); else await page.mouse.click(point.x, point.y);
 }
 async function open(page: Page, touch: boolean) {
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
   await select(page, touch, 8, 8, 40); await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 12000 });
   await press(page.getByRole('button', { name: 'Close conversation' }), touch);
   await select(page, touch, 11, 8, 75);

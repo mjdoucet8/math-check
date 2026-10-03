@@ -5,7 +5,7 @@ declare global {
   interface Window { numoraAudioProbe: { spoken: string[]; canceled: number; tones: number }; }
 }
 async function openStones(page: Page, touch: boolean) {
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true');
   await select(page, touch, 'keeper');
   await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 20000 });
   await press(page.getByRole('button', { name: 'Close conversation' }), touch);

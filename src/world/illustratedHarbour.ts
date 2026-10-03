@@ -3,11 +3,11 @@ import { walkingLeg } from './walking.ts';
 import { BUILDINGS, PROPS, project } from './harbour.ts';
 
 export const HARBOUR_ART = [
-  ['harbour-quay-art', 'harbour-quay-v1.png'],
-  ['harbour-cottage-art', 'harbour-cottage-v1.png'],
-  ['harbour-beacon-art', 'harbour-beacon-v1.png'],
-  ['harbour-keeper-art', 'harbour-keeper-v1.png'],
-  ['harbour-props-art', 'harbour-props-v1.png'],
+  ['harbour-quay-art', 'harbour-quay-v1.webp'],
+  ['harbour-cottage-art', 'harbour-cottage-v1.webp'],
+  ['harbour-beacon-art', 'harbour-beacon-v1.webp'],
+  ['harbour-keeper-art', 'harbour-keeper-v1.webp'],
+  ['harbour-props-art', 'harbour-props-v1.webp'],
 ] as const;
 interface WalkRig {
   root: Phaser.GameObjects.Container;

@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { select, press, pump, complete } from './gameHelpers.ts';
 
 async function reachCoast(page: Page, touch: boolean) {
-  await page.goto('/'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
+  await page.goto('./'); await expect(page.locator('#game')).toHaveAttribute('data-ready', 'true', { timeout: 20000 });
   await select(page, touch, 'keeper'); await expect(page.locator('#speaker')).toHaveText('Harbour keeper', { timeout: 20000 });
   await press(page.getByRole('button', { name: 'Close conversation' }), touch);
   await select(page, touch, 'beacon'); await expect(page.locator('#challenge-panel')).toBeVisible({ timeout: 20000 });
@@ -19,11 +19,14 @@ test('illustrated coast and garden restore, reveal the reward and survive refres
   page.on('pageerror', error => errors.push(error.message));
   page.on('response', response => { if (response.url().includes('/art/') && response.ok()) loaded.add(response.url().split('/').at(-1)!); });
   await reachCoast(page, touch);
-  for (const file of ['coastal-path-v1.png','garden-courtyard-v1.png','garden-props-v1.png','garden-keeper-v1.png']) expect(loaded.has(file)).toBe(true);
+  expect(loaded.has('coastal-path-v1.webp')).toBe(true);
+  expect(loaded.has('garden-props-v1.webp')).toBe(true);
+  expect(loaded.has('garden-courtyard-v1.webp')).toBe(false);
   await expect(host).toHaveAttribute('data-art', 'illustrated');
   await page.screenshot({ path: info.outputPath('illustrated-coastal-path.png') });
   await select(page, touch, 'arch'); await expect(host).toHaveAttribute('data-area', 'garden', { timeout: 20000 });
   await expect(host).toHaveAttribute('data-art', 'illustrated');
+  for (const file of ['garden-courtyard-v1.webp','garden-keeper-v1.webp']) expect(loaded.has(file)).toBe(true);
   await expect(host).toHaveAttribute('data-garden-restored', '0');
   await expect(host).toHaveAttribute('data-reward-unlocked', 'false');
   await page.screenshot({ path: info.outputPath('illustrated-sleeping-garden.png') });
@@ -54,9 +57,9 @@ test('illustrated coast and garden restore, reveal the reward and survive refres
 });
 
 test('missing coast, garden and prop images retain the full playable journey', async ({ page }, info) => {
-  await page.route('**/art/coastal-path-v1.png', route => route.abort());
-  await page.route('**/art/garden-courtyard-v1.png', route => route.abort());
-  await page.route('**/art/garden-props-v1.png', route => route.abort());
+  await page.route('**/art/coastal-path-v1.webp', route => route.abort());
+  await page.route('**/art/garden-courtyard-v1.webp', route => route.abort());
+  await page.route('**/art/garden-props-v1.webp', route => route.abort());
   const touch = info.project.name === 'touch';
   await reachCoast(page, touch);
   await expect(page.locator('#game')).toHaveAttribute('data-art', 'geometric-fallback');

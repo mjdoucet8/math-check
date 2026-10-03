@@ -10,9 +10,11 @@ The explorer now uses an articulated walk rig made from registered cutouts of th
 
 The harbour activity uses the generated beach stone and the original navy/cream/brass visual language. Its eight supply stones, five-stone target, edits versus Confirm, practice/guidance, outcome classification, reset and save record have not changed. There is no pre-equipped satchel. Missing artwork falls back to playable geometric scenery/objects with a notice rather than blocking play.
 
+Current delivery: the PNG masters are now preserved under `assets/art-source/`. The game serves pixel-identical lossless WebP versions and loads each chapter on entry. See [device readiness](device-readiness.md) for current download budgets and verification; the sizes below record the original illustration checkpoint.
+
 ## Assets and prompts
 
-Six harbour runtime PNGs are saved under `public/art/`:
+Six harbour PNG masters are saved under `assets/art-source/` (runtime WebP copies are under `public/art/`):
 
 - `harbour-quay-v1.png`: quay, surrounding sea and distant scenery.
 - `harbour-cottage-v1.png`: transparent cottage, reused at the two existing building footprints.
@@ -23,7 +25,7 @@ Six harbour runtime PNGs are saved under `public/art/`:
 
 `docs/art-prompts.md` preserves the exact six prompts used with built-in image generation. `docs/art-manifest.json` records file sizes, dimensions and SHA-256 checksums. The original supplied PNGs remain in `/home/owner/education-games/numora` as references, excluded from the repository. Generated alpha is preserved; engine texture frames crop/position assets without rewriting the PNGs. The layout guide in `docs/art/` is generated from the existing map geometry.
 
-The six harbour assets total about 13.1 MB; the current illustrated island totals about 24.5 MB and is loaded once at entry. This local review checkpoint prioritizes visual evaluation; smaller delivery encodings and device/network performance work remain before a classroom release. No graphics application was downloaded or installed. No dependency, curriculum, save-format or progression changes were made. The artwork is an adaptation of the concept style, not an exact reproduction of a flattened screenshot. The quay is currently a still illustration; further sea/lighting animation is a later visual refinement.
+The six harbour PNG masters total about 13.1 MB; all illustrated island masters total about 24.5 MB. The original checkpoint loaded them once at entry. Lossless delivery encoding and chapter loading are now implemented; physical-device/network performance remains before a classroom release. No graphics application was downloaded or installed. No dependency, curriculum, save-format or progression changes were made. The artwork is an adaptation of the concept style, not an exact reproduction of a flattened screenshot. The quay is currently a still illustration; further sea/lighting animation is a later visual refinement.
 
 ## Verification
 
