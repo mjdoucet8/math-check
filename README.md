@@ -52,7 +52,7 @@ npm test
 - `tests/`: domain and browser checks.
 - `docs/prototype-brief.md`: original approved scope, preserved unchanged.
 - `docs/recovered-starter/`: previous incomplete local starter preserved unchanged as historical material. Its commands and instructions are not the active implementation.
-- `docs/source-manifest.json`: original filenames, local source locations and checksums for the supplied handoff, concepts and curriculum. Originals remain in `/home/owner/Numora`; images/PDFs have not been uploaded to GitHub.
+- `docs/source-manifest.json`: original filenames, local source locations and checksums for the supplied handoff, concepts and curriculum. Originals remain in `/home/owner/education-games/nunora`; images/PDFs have not been uploaded to GitHub.
 - `docs/foundation-status.md`: completed foundation record.
 - `docs/movement-review.md`: approved movement checkpoint.
 - `docs/counting-checkpoint.md`: approved harbour counting scope.
