@@ -78,8 +78,8 @@ canvas {
   margin:9px 0;
 }
 .goal p {
-  font-size:11px;
-  line-height:1.6;
+  font-size:14px;
+  line-height:1.5;
   color:#c7d8ce;
   margin:0;
 }
@@ -125,13 +125,13 @@ canvas {
   background:#173b46e6;
   padding:10px 14px;
   border-radius:6px;
-  font-size:11px;
+  font-size:13px;
   line-height:1.5;
   max-width:580px;
   margin:0;
 }
 button {
-  font:12px Arial,sans-serif;
+  font:14px Arial,sans-serif;
   color:#f2e9cd;
   background:#1a414c;
   border:1px solid #96b1a777;
@@ -234,7 +234,7 @@ button:disabled {
     right:16px;
   }
   #status {
-    font-size:10px;
+    font-size:12px;
     max-width:calc(100% - 108px);
   }
   .dialogue {
@@ -242,7 +242,7 @@ button:disabled {
     padding:17px;
   }
   .dialogue p {
-    font-size:13px;
+    font-size:15px;
   }
 }
 .challenge-panel {position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:#102e3acc;backdrop-filter:blur(3px);padding:20px;}
@@ -250,7 +250,7 @@ button:disabled {
 #challenge-content header {display:flex;align-items:center;justify-content:space-between;gap:10px;}
 #challenge-content header button {font-size:25px;min-width:44px;padding:0;}
 #challenge-content h2 {font:27px Georgia,serif;margin:12px 0;}
-#challenge-content p {font-size:13px;line-height:1.6;color:#d3dfce;}
+#challenge-content p {font-size:15px;line-height:1.6;color:#d3dfce;}
 .stone-zones {display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;}
 .stone-zones section {padding:14px;border:1px solid #829a8c55;border-radius:12px;background:#214d56;}
 .stone-zones h3 {font:16px Georgia,serif;margin:0 0 12px;}
@@ -262,7 +262,7 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 .encounter-feedback {min-height:42px;margin-bottom:10px;}
 .encounter-actions {display:flex;flex-wrap:wrap;gap:10px;}
 .encounter-actions button:first-child {background:#ad945c;color:#142f36;border-color:#d6bf81;}
-.listen {margin-top:14px;background:transparent;font-size:11px;}
+.listen {background:transparent;}
 .practice-stones {display:flex;gap:20px;justify-content:center;margin-top:28px;}
 .practice-stones .stone {width:75px;height:65px;opacity:.45;}
 .practice-stones .counted {opacity:1;outline:2px solid #dbc180;}
@@ -273,7 +273,7 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 #vessel-content header {display:flex;align-items:center;justify-content:space-between;gap:10px;}
 #vessel-content header button {font-size:25px;min-width:44px;padding:0;}
 #vessel-content h2 {font:27px Georgia,serif;margin:12px 0;}
-#vessel-content p {font-size:13px;line-height:1.6;color:#d3dfce;}
+#vessel-content p {font-size:15px;line-height:1.6;color:#d3dfce;}
 .glass-vessel {width:150px;height:224px;border:3px solid #bfdacc;border-top:8px solid #d8e8d5;border-radius:8px 8px 28px 28px;background:#a3d3c21a;margin:20px auto;display:flex;flex-direction:column-reverse;overflow:hidden;padding:8px;gap:3px;box-shadow:inset 8px 0 0 #d4e9d322;}
 .water-portion {height:22px;flex:none;background:linear-gradient(100deg,#76adad,#91c5b5);border-radius:3px;border-top:2px solid #c4e1caaa;}
 @media(max-width:540px){#vessel-content{padding:18px;max-height:calc(100dvh - 24px);}#vessel-content h2{font-size:23px;}.glass-vessel{height:205px;margin:14px auto;}.water-portion{height:20px;}}
@@ -295,9 +295,36 @@ button.stone:hover {background:#517a7944;border-color:#c6b982;}
 @media(max-width:540px){#reward-content{padding:18px;max-height:calc(100dvh - 24px);}#reward-content h2{font-size:24px;}.satchel-choices{gap:8px;}.satchel-choices label{font-size:12px;padding:12px 4px;}}
 
 .controls>div {max-width:580px;}
-#save-status {display:block;font-size:10px;color:#c7d8ce;margin:5px 14px 0;max-width:420px;line-height:1.5;}
+#save-status {display:block;font-size:12px;color:#c7d8ce;margin:5px 14px 0;max-width:420px;line-height:1.5;}
 #reset-panel {z-index:11;padding:20px;}
 #reset-panel section {max-width:440px;}
 #reset-panel p {font-size:14px;line-height:1.6;}
 #reset-panel .encounter-actions {justify-content:center;}
-@media(max-width:700px){.controls>div{max-width:calc(100% - 108px);}#status{max-width:100%;}#save-status{font-size:9px;margin-left:8px;}}
+@media(max-width:700px){.controls>div{max-width:calc(100% - 108px);}#status{max-width:100%;}#save-status{font-size:11px;margin-left:8px;}}
+
+/* Keep actions readable while reserving the centre for the island. */
+.audio-controls {display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.audio-hint {font-size:12px!important;line-height:1.5!important;margin-bottom:0;}
+.pause-panel {padding:16px;}
+.pause-panel section {max-width:100%;max-height:calc(100dvh - 32px);overflow:auto;}
+.dialogue {max-height:calc(100dvh - 220px);overflow:auto;}
+.dialogue>div {min-width:0;}
+.dialogue button {flex-shrink:0;}
+@media(max-width:900px){.badge{display:none;}}
+@media(max-width:700px){
+  .header-controls button {min-width:64px;padding:10px 9px;}
+  .goal {max-width:calc(100% - 32px);width:280px;}
+  .goal p {font-size:13px;}
+  .dialogue {bottom:125px;max-height:calc(100dvh - 210px);}
+}
+@media(max-height:600px){
+  .masthead {top:10px;left:16px;right:16px;}
+  .wordmark {font-size:26px;}
+  .goal {top:66px;left:16px;padding:9px 14px;max-width:300px;}
+  .goal .eyebrow,.goal p,.place {display:none;}
+  .goal h1 {font-size:18px;margin:0;}
+  .controls {bottom:10px;left:16px;right:16px;}
+  #status {padding:6px 10px;font-size:12px;}
+  #save-status {margin-top:3px;}
+  .dialogue {bottom:115px;max-height:calc(100dvh - 175px);padding:14px;}
+}

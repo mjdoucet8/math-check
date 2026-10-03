@@ -1,3 +1,4 @@
+import { audio } from './ui/audio.ts';
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene.ts';
 import { HarbourScene, type HarbourState } from './scenes/HarbourScene.ts';
@@ -53,8 +54,8 @@ function releaseWorld() {
   (game.scene.getScene(HarbourScene.KEY) as HarbourScene).setCameraPaused(false);
   game.scene.resume(HarbourScene.KEY); element('world-ui').inert = false; host.inert = false;
 }
-const encounter = new StoneEncounter(holdWorld,releaseWorld,()=>game.events.emit('harbour-restored'),loaded.session.stones,saveJourney);
-const vessels = new VesselEncounter(holdWorld,releaseWorld,count=>game.events.emit('garden-water',count),loaded.session.vessels,saveJourney);
+const encounter = new StoneEncounter(holdWorld,releaseWorld,()=>{ game.events.emit('harbour-restored'); audio.cue(); },loaded.session.stones,saveJourney);
+const vessels = new VesselEncounter(holdWorld,releaseWorld,count=>{ game.events.emit('garden-water',count); audio.cue(); },loaded.session.vessels,saveJourney);
 const reward = new SatchelReward(()=>journey.satchelColour,holdWorld,releaseWorld,colour=>game.events.emit('garden-equip',colour));
 game.events.on('garden-open-reward',()=>reward.open());
 game.events.on('garden-open-challenge',()=>vessels.open());
@@ -62,6 +63,7 @@ game.events.on('harbour-open-challenge', () => encounter.open());
 function closeDialogue() { dialogue.hidden = true; }
 function setPaused(value: boolean) {
   paused = value;
+  if (paused) audio.stop();
   (game.scene.getScene(HarbourScene.KEY) as HarbourScene).setCameraPaused(paused);
   if (paused) game.scene.pause(HarbourScene.KEY); else game.scene.resume(HarbourScene.KEY);
   pausePanel.hidden = !paused; pause.textContent = paused ? 'Resume' : 'Pause';
@@ -70,7 +72,7 @@ function setPaused(value: boolean) {
   if (paused) element('resume').focus(); else pause.focus();
 }
 game.events.on('harbour-ready', () => {
-  host.dataset.ready = 'true'; host.dataset.checkpoint = 'saved-journey';
+  host.dataset.ready = 'true'; host.dataset.checkpoint = 'polished-prototype';
   pause.disabled = false; reset.disabled = false; status.textContent = hint;
 });
 // Read-only geometry exposed for browser verification; input still comes from real clicks/taps.
@@ -82,11 +84,11 @@ game.events.on('harbour-state', (state: HarbourState) => {
   const details=state.area==='harbour'?['01','THE QUIET HARBOUR','A light waiting to awaken.']:state.area==='coastal-path'?['02','THE COASTAL PATH','Something grows beyond the shore.']:['03','THE HIDDEN GARDEN','Water can bring this place back.'];
   element('place-number').textContent=details[0]!;element('place-name').textContent=details[1]!;element('place-line').textContent=details[2]!;
   hint='Click or tap the paths to walk. Select a person, sign or machine to approach.';
-  element('goal-hint').textContent=state.area==='harbour'?'Select a person, the light or the coastal sign to walk over.':state.area==='coastal-path'?'Select the overgrown arch to see what lies beyond.':'Select the garden keeper or the old pump to approach.';
+  element('goal-hint').textContent=state.area==='harbour'?'Tap a person, the light or the coastal sign.':state.area==='coastal-path'?'Tap the overgrown arch to explore.':'Tap the keeper or the old pump.';
   }
   const rewardChanged=host.dataset.rewardUnlocked!==String(state.rewardUnlocked)||host.dataset.satchel!==(state.satchelColour ?? 'none');
   host.dataset.rewardUnlocked=String(state.rewardUnlocked); host.dataset.satchel=state.satchelColour ?? 'none';
-  if(state.area==='garden' && (rewardChanged||areaChanged)) element('goal-hint').textContent=state.rewardUnlocked ? state.satchelColour ? 'Your satchel is ready. Revisit the coast or enjoy the garden.' : 'Select the explorer satchel in the newly opened garden corner.' : 'Select the garden keeper or the old pump to approach.';
+  if(state.area==='garden' && (rewardChanged||areaChanged)) element('goal-hint').textContent=state.rewardUnlocked ? state.satchelColour ? 'Your satchel is ready. Revisit the coast or enjoy the garden.' : 'Tap the satchel in the open garden corner.' : 'Tap the keeper or the old pump.';
   host.dataset.beaconAwake = String(state.beaconAwake); host.dataset.cell = state.cell; host.dataset.destination = state.destination; host.dataset.position = JSON.stringify(state.position);
   host.dataset.view = JSON.stringify(state.view); host.dataset.moving = String(state.moving);
   host.dataset.visited = state.visited.join(',');
@@ -102,6 +104,14 @@ game.events.on('harbour-feedback', (text: string) => {
   feedbackTimer = setTimeout(() => { status.textContent = hint; }, 2200);
 });
 const options = { signal: lifecycle.signal };
+// A user gesture enables optional audio; nothing plays when the game loads.
+document.addEventListener('pointerdown', () => audio.unlock(), { ...options, capture: true });
+document.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') audio.unlock(); }, { ...options, capture: true });
+document.addEventListener('click', event => {
+  if ((event.target as HTMLElement).closest('[data-audio-toggle]')) audio.toggle();
+}, options);
+document.addEventListener('visibilitychange', () => { if (document.hidden) audio.stop(); }, options);
+audio.refresh();
 pause.addEventListener('click', () => setPaused(!paused), options);
 element('resume').addEventListener('click', () => setPaused(false), options);
 element('close-dialogue').addEventListener('click', closeDialogue, options);
@@ -134,6 +144,6 @@ document.addEventListener('keydown', (event) => {
   if (paused && event.key === 'Tab') { event.preventDefault(); element('resume').focus(); }
 }, options);
 motion.addEventListener('change', (event) => { game.registry.set('reduced-motion', event.matches); }, options);
-function dispose() { encounter.dispose(); vessels.dispose(); reward.dispose(); lifecycle.abort(); clearTimeout(feedbackTimer); game.destroy(true); }
+function dispose() { audio.dispose(); encounter.dispose(); vessels.dispose(); reward.dispose(); lifecycle.abort(); clearTimeout(feedbackTimer); game.destroy(true); }
 window.addEventListener('pagehide', (event) => { if (!event.persisted) dispose(); }, options);
 if (import.meta.hot) import.meta.hot.dispose(dispose);

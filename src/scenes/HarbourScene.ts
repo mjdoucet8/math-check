@@ -107,7 +107,10 @@ export class HarbourScene extends Phaser.Scene {
   }
   private moveToObject(object: Interactable) {
     const next = approach(this.planningStart(), object, cell=>areaWalkable(this.journey.area,cell));
-    if (next !== null) this.setPath(next, object);
+    if (next !== null) {
+      this.setPath(next, object);
+      if (this.path.length) this.game.events.emit('harbour-feedback', `Walking to ${object.name.toLowerCase()}…`);
+    } else this.game.events.emit('harbour-feedback', 'That is out of reach. Try moving closer along the path.');
   }
   private showMarker(point: Point, blocked: boolean) {
     this.marker.clear().setPosition(point.x, point.y).setAlpha(1);

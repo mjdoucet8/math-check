@@ -42,7 +42,7 @@ export class SatchelReward {
       <button data-action="equip">${current ? 'Wear this colour' : 'Equip satchel'}</button>`;
     this.content.querySelector<HTMLInputElement>('input:checked')!.focus();
   }
-  close() { if (!this.active) return; this.active = false; this.panel.hidden = true; this.onClose(); this.lastFocus?.focus(); }
+  close() { if (!this.active) return; this.active = false; this.panel.hidden = true; this.onClose(); (this.lastFocus?.matches('button,input') ? this.lastFocus : document.getElementById('pause'))?.focus(); }
   reset() { this.close(); }
   dispose() { this.abort.abort(); }
 }

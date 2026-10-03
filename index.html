@@ -5,7 +5,7 @@
 <main class="game-shell" aria-label="Numora island adventure">
   <div id="game" aria-label="Isometric harbour. Click or tap the ground to walk."></div>
   <div id="world-ui">
-    <header class="masthead"><div class="wordmark">Numora <span>✧</span></div><div class="header-controls"><span class="badge">THE SLEEPING ISLAND</span><button id="pause" disabled aria-pressed="false">Pause</button></div></header>
+    <header class="masthead"><div class="wordmark">Numora <span>✧</span></div><div class="header-controls"><span class="badge">THE SLEEPING ISLAND</span><button id="sound" data-audio-toggle aria-pressed="true">Sound on</button><button id="pause" disabled aria-pressed="false">Pause</button></div></header>
     <section class="goal"><span class="eyebrow">YOUR FIRST STEPS</span><h1 id="goal-text">Meet the harbour keeper</h1><p id="goal-hint">Select a person or the light to walk over and take a look.</p></section>
     <aside class="place"><span id="place-number" class="place-number">01</span><div><span id="place-name">THE QUIET HARBOUR</span><small id="place-line">A light waiting to awaken.</small></div></aside>
     <footer class="controls"><div><p id="status" role="status">Preparing the harbour…</p><small id="save-status" aria-live="polite"></small></div><button id="reset" disabled>Start again</button></footer>
@@ -15,7 +15,7 @@
   <div id="vessel-panel" class="challenge-panel" hidden><section id="vessel-content" role="dialog" aria-modal="true" aria-labelledby="vessel-title"></section></div>
   <div id="reward-panel" class="challenge-panel" hidden><section id="reward-content" role="dialog" aria-modal="true" aria-labelledby="reward-title"></section></div>
   <div id="reset-panel" class="pause-panel" hidden><section role="dialog" aria-modal="true" aria-labelledby="reset-title"><span class="eyebrow">A FRESH ADVENTURE</span><h2 id="reset-title">Start a new journey?</h2><p>This clears your saved progress and satchel on this browser.</p><div class="encounter-actions"><button id="cancel-reset">Keep exploring</button><button id="confirm-reset">Start a new journey</button></div></section></div>
-  <div id="pause-panel" class="pause-panel" hidden><section role="dialog" aria-modal="true" aria-labelledby="pause-title"><span class="eyebrow">TAKE YOUR TIME</span><h2 id="pause-title">The harbour can wait.</h2><button id="resume">Continue exploring</button></section></div>
+  <div id="pause-panel" class="pause-panel" hidden><section role="dialog" aria-modal="true" aria-labelledby="pause-title"><span class="eyebrow">TAKE YOUR TIME</span><h2 id="pause-title">The island can wait.</h2><button id="resume">Continue exploring</button></section></div>
 </main>
 <script type="module" src="/src/main.ts"></script>
 </body></html>
