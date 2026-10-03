@@ -21,7 +21,7 @@ Six runtime PNGs are saved under `public/art/`:
 - `harbour-keeper-v1.png`: transparent keeper.
 - `harbour-props-v1.png`: transparent prop/activity-object atlas.
 
-`docs/art-prompts.md` preserves the exact six prompts used with built-in image generation. `docs/art-manifest.json` records file sizes, dimensions and SHA-256 checksums. The original supplied PNGs remain in `/home/owner/education-games/nunora` as references, excluded from the repository. Generated alpha is preserved; engine texture frames crop/position assets without rewriting the PNGs. The layout guide in `docs/art/` is generated from the existing map geometry.
+`docs/art-prompts.md` preserves the exact six prompts used with built-in image generation. `docs/art-manifest.json` records file sizes, dimensions and SHA-256 checksums. The original supplied PNGs remain in `/home/owner/education-games/numora` as references, excluded from the repository. Generated alpha is preserved; engine texture frames crop/position assets without rewriting the PNGs. The layout guide in `docs/art/` is generated from the existing map geometry.
 
 The full-resolution runtime artwork totals about 13.1 MB and is loaded once at entry. This local review checkpoint prioritizes visual evaluation; smaller delivery encodings and device/network performance work remain before a classroom release. No graphics application was downloaded or installed. No dependency, curriculum, save-format or progression changes were made. The artwork is an adaptation of the concept style, not an exact reproduction of a flattened screenshot. The quay is currently a still illustration; further sea/lighting animation is a later visual refinement.
 

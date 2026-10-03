@@ -8,7 +8,7 @@
 - A small serializable shared contract for world progress, submissions and outcomes. Correct first responses, correct retries, assisted and guided completion are distinct. Help cannot be downgraded; duplicate submissions cannot create extra evidence. This is not a mastery classifier or storage implementation.
 - Local run/build/test instructions and a GitHub Actions workflow.
 - All 14 recovered starter text files preserved byte-for-byte under docs/recovered-starter. The original repository brief remains unchanged.
-- A checksum manifest for all 10 files supplied in /home/owner/education-games/nunora. Their images and curriculum PDFs remain untouched in that folder; they were not uploaded to the source repository.
+- A checksum manifest for all 10 files supplied in /home/owner/education-games/numora. Their images and curriculum PDFs remain untouched in that folder; they were not uploaded to the source repository.
 
 ## Verified locally
 
